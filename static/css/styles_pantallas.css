@@ -1,0 +1,131 @@
+
+/* Estilos Generales del Formulario */
+.form-card {
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.form-section-title {
+    border-bottom: 2px solid #3b18d6;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    color: #3b18d6;
+    font-weight: bold;
+    font-size: 1.1em;
+    text-transform: uppercase;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #333;
+}
+/* Estilo especial para el Total Inversión (Calculado) */
+#id_total_inversion {
+    background-color: #1a4d94 !important;
+    color: #ffffff !important;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    cursor: not-allowed;
+}
+/* Contenedor de Imagen */
+.image-preview-container {
+    border: 2px dashed #ccc;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+.preview-img {
+    max-width: 150px;
+    border-radius: 5px;
+    margin: 10px auto;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+/* Botones */
+.btn-container {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+
+/* Cabeceras de la tabla del subformulario */
+.table-wrapper table thead th {
+    font-size: 12px !important; /* Si tu base era 14px, esto lo baja a 12px */
+    padding: 8px 10px !important;
+}
+
+/* Celdas, inputs, selects y textareas dentro del subformulario */
+.table-wrapper table tbody td,
+.table-wrapper table tbody .form-control,
+.table-wrapper table tbody input,
+.table-wrapper table tbody select,
+.table-wrapper table tbody textarea {
+    font-size: 12px !important; /* Achica el texto introducido y los placeholders */
+}
+
+/* Opcional: Compacta el relleno (padding) de los inputs para que jueguen con el tamaño de la letra */
+.table-wrapper table tbody .form-control {
+    padding: 4px 8px !important;
+    height: auto !important; /* Permite que el input reduzca su altura proporcionalmente */
+}
+
+/* Ajuste para las áreas de observaciones o títulos del histórico */
+.table-wrapper table tbody textarea {
+    padding: 6px 8px !important;
+    line-height: 1.3 !important;
+}
+
+/* Ajuste para los inputs */
+.form-relieve input[type="text"],
+.form-relieve input[type="number"],
+.form-relieve input[type="email"],
+.form-relieve input[type="password"],
+.form-relieve select,
+.form-relieve textarea {
+    background-color: #f1f5f9 !important; /* Gris claro (slate-100) */
+    border: 2px solid #cbd5e1 !important;  /* Borde definido (slate-300) */
+    border-radius: 0.75rem !important;      /* Esquinas redondeadas */
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.08) !important; /* Relieve interno */
+    padding: 0.6rem 1rem !important;
+    color: #0f172a !important;              /* Texto oscuro visible */
+    outline: none !important;
+    transition: all 0.2s ease-in-out !important;
+    margin-bottom: 1.25rem !important;      /* Margen inferior para los inputs */
+    margin-left: 1rem;
+}
+
+/* Efecto de foco al escribir */
+.form-relieve input:focus,
+.form-relieve select:focus,
+.form-relieve textarea:focus {
+    background-color: #ffffff !important;
+    border-color: #7c3aed !important;      /* Borde morado a juego con el título */
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
+}
+
+/* Margen de los labels */
+.form-relieve label {
+    display: block !important;
+    font-weight: 700 !important;
+    color: #334155 !important;
+    margin-bottom: 0.5rem !important;      /* Margen entre label e input */
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 0.875rem !important;
+}
+
+/* Separación de la barra de botones respecto a los inputs y al marco inferior */
+.form-relieve form .border-t,
+.form-relieve form > div:last-child {
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;     /* Margen de los botones respecto al marco de abajo */
+}

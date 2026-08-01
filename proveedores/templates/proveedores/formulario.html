@@ -1,0 +1,50 @@
+<form action="" method="post" style="max-width: 900px; margin: 0 auto;">
+    {% csrf_token %}
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        
+        <div class="form-column">
+            <p>
+                <label>{{ formulario.ced_proveedor.label }}</label>
+                {{ formulario.ced_proveedor }}
+            </p>
+            <p>
+                <label>{{ formulario.nombres_apellidos.label }}</label>
+                {{ formulario.nombres_apellidos }}
+            </p>
+            <p>
+                <label>{{ formulario.cedula_representante.label }}</label>
+                {{ formulario.cedula_representante }}
+            </p>
+            <p>
+                <label>{{ formulario.nombres_representante.label }}</label>
+                {{ formulario.nombres_representante }}
+            </p>
+        </div>
+
+        <div class="form-column">
+            <p>
+                <label>{{ formulario.direccion.label }}</label>
+                {{ formulario.direccion }}
+            </p>
+            <p>
+                <label>{{ formulario.telefonos.label }}</label>
+                {{ formulario.telefonos }}
+            </p>
+            <p>
+                <label>{{ formulario.observaciones.label }}</label>
+                {{ formulario.observaciones }}
+            </p>
+        </div>
+    </div>
+
+        <!-- Botones de acción: gap-4 (espacio entre sí), pl-4 (izquierdo), pb-6 y mb-2 (inferior) -->
+        <div style="display: flex; gap: 10px; justify-content: center; padding-top: 10px; padding-bottom: 10px;">
+            <button style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" type="submit" class="button special icon fa-save">
+                Grabar
+            </button>
+            <a href="{% url 'listado_proveedores' %}?{{ query_string }}" style="background-color: #dc2626; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;" class="button alt icon fa-close">
+                Cancelar
+            </a>
+        </div>
+</form>

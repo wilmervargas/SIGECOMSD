@@ -1,0 +1,47 @@
+    /* Estilos base para garantizar que los botones se vean tipo 'pills' horizontales */
+    .pag-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 12px 0;
+    }
+    .pag-list {
+        display: flex !important;
+        flex-wrap: wrap;
+        list-style: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+    }
+    .pag-link-btn {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        height: 34px;
+        padding: 0 10px !important;
+        font-size: 0.85em !important;
+        font-weight: 600;
+        text-decoration: none !important;
+        border-radius: 6px !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background-color: rgba(255, 255, 255, 0.08);
+        color: #0b2df0 !important;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .pag-link-btn:hover {
+        background-color: #0b2df0 !important;
+        border-color: #0b2df0 !important;
+        color: #ffffff !important;
+    }
+    .pag-item.active .pag-link-btn {
+        background-color: #0b2df0 !important;
+        border-color: #0b2df0 !important;
+        color: #ffffff !important;
+        font-weight: bold;
+        box-shadow: 0 0 8px rgba(11, 45, 240, 0.5);
+    }

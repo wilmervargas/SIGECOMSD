@@ -1,0 +1,60 @@
+/* inventario/static/css/reporte.css */
+
+/* Define la página para la impresión */
+@page {
+    size: A4 portrait; /* Tamaño de papel A4 en modo vertical */
+    margin: 2cm;
+}
+
+body {
+    font-family: sans-serif;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.report-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.report-header .logo {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Manejo de saltos de página en la tabla */
+tbody tr {
+    page-break-inside: avoid;
+}
+
+/* Pie de página */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+}
+
+/* Numeración de páginas (avanzado) */
+@page {
+    @bottom-center {
+        content: "Página " counter(page) " de " counter(pages);
+    }
+}

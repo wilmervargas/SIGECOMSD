@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Orden de Compra - {{ entrada.num_orden }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* CONFIGURACIÓN DE PÁGINA A VERTICAL */
+            @page {
+                size: letter portrait;
+                margin: 1cm 1cm 1cm 1.5cm;
+            }
+            
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; left: 1.5cm; right: 1.5cm; height: 3cm;
+            }
+
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; left: 1.5cm; right: 1.5cm; height: 1.5cm; 
+            }
+
+            @frame content {
+                top: 3.5cm; left: 1.5cm; right: 1.5cm; bottom: 2cm;
+            }
+
+            body { 
+                font-family: Arial, sans-serif; 
+                font-size: 8pt; 
+                color: #333; 
+            }
+            
+            .header-separator {
+                border-bottom: 2px solid #1a4d94;
+                margin-bottom: 5px;
+            }
+
+            .info-table {
+                width: 100%;
+                border: none;
+                margin-bottom: 10px;
+            }
+
+            .info-table td {
+                border: none;
+                padding: 2px;
+                vertical-align: top;
+            }
+
+            /* ESTILO DE TABLA CON ENCABEZADO AZUL */
+            table.items-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .items-table th {
+                background-color: #1a4d94; /* Azul Institucional */
+                color: white;
+                border: 1px solid #1a4d94;
+                padding: 4px;
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 8pt;
+            }
+
+            .items-table td {
+                border: 1px solid #ccc;
+                padding: 3px;
+                font-size: 8pt;
+            }
+
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .bold { font-weight: bold; }
+            
+            .status-badge {
+                font-size: 9pt;
+                color: #1a4d94;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header-content">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="width: 20%; border: none; vertical-align: middle;">
+                        {% if logo_path %}
+                            <img src="{{ logo_path }}" alt="Logo" style="height: 50px; width: auto;"/>
+                        {% endif %}
+                    </td>
+                    <td style="width: 60%; border: none; text-align: center; vertical-align: middle;">
+                        <h1 style="margin: 0; color: #1a4d94; font-size: 16pt;">ORDEN (REPOSICIÓN)</h1>
+                    </td>
+                    <td style="width: 20%; border: none; text-align: right; vertical-align: middle;">
+                        <h2 style="margin: 0; color: #333; font-size: 14pt;">N° {{ entrada.num_orden }}</h2>
+                        <p style="margin: 0; font-size: 8pt;">Fecha: {{ entrada.fecha_orden|date:"d/m/Y" }}</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="header-separator"></div>
+        </div>
+
+        <table class="info-table">
+            <tr>
+                <td width="55%">
+                    <br>
+                    <p style="margin: 0; font-size: 9pt;">Estatus: <span class="status-badge">{{ entrada.get_estado_display|default:entrada.estado }}</span></p>
+                    <p class="bold" style="color: #1a4d94; margin-bottom: 2px; border-bottom: 1px solid #eee;">DATOS DEL PROVEEDOR</p>
+                    <p style="margin: 0; font-size: 9pt;"><strong>{{ entrada.ced_proveedor.nombres_apellidos|upper }}</strong></p>
+                    <p style="margin: 0;">RIF/CI: {{ entrada.ced_proveedor.ced_proveedor }}</p>
+                    <p style="margin: 0;">Dirección: {{ entrada.ced_proveedor.direccion|default:"N/A" }}</p>
+                </td>
+                <td width="45%">
+                    <br><br><br>
+                    <p class="bold" style="color: #1a4d94; margin-bottom: 2px; border-bottom: 1px solid #eee;">REFERENCIA DE RECEPCIÓN</p>
+                    <p style="margin: 0;"><strong>Factura N°:</strong> {{ entrada.num_factura|default:"PENDIENTE" }}</p>
+                    <p style="margin: 0;"><strong>Fecha Factura:</strong> {{ entrada.fecha_factura|date:"d/m/Y"|default:"---" }}</p>
+                    <p style="margin: 0;"><strong>Monto Total:</strong>{{ entrada.monto_factura|floatformat:2 }}</p>
+                </td>
+            </tr>
+        </table>
+
+<table class="items-table">
+    <thead>
+        <tr>
+            <th style="width: 5%;">#</th>
+            <th style="width: 10%;">CÓDIGO</th>
+            <th style="width: 55%;">DESCRIPCIÓN DEL PRODUCTO</th> 
+            <th style="width: 20%;">UND.MEDIDA</th>
+            <th style="width: 15%;">CANT.RECIBIDA</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle in entrada.detalles.all %}
+        <tr>
+            <td class="text-center">{{ forloop.counter }}</td>
+            <td class="text-center">{{ detalle.cod_producto.cod_producto }}</td>
+            <td>{{ detalle.cod_producto.descripcion }}</td>
+            <td>{{ detalle.cod_producto.cod_unidad }}</td>
+            <td class="text-center">{{ detalle.cant_recibida|floatformat:2 }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No hay productos registrados en esta orden.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+        <div style="margin-top: 50px;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="border: none; text-align: center; width: 45%;">
+                        <div style="border-top: 1px solid #333; padding-top: 5px; margin: 0 20px;">
+                            Entregado por (Proveedor)<br>
+                            <small>Firma y Sello</small>
+                        </div>
+                    </td>
+                    <td style="border: none; width: 10%;"></td>
+                    <td style="border: none; text-align: center; width: 45%;">
+                        <div style="border-top: 1px solid #333; padding-top: 5px; margin: 0 20px;">
+                            Recibido por (Almacén)<br>
+                            <small>Firma y Fecha</small>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="footer-content">
+            <div class="header-separator"></div>
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="border: none; text-align: left; font-size: 7pt;">
+                        Generado por el Sistema de Inventario - Impreso: {{ fecha_emision|date:"d/m/Y H:i" }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

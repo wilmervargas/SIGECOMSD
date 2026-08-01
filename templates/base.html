@@ -1,0 +1,82 @@
+
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SIGECOMSD</title>
+
+  <meta name="author" content="">
+  <meta name="keywords" content="">
+  <meta name="description" content="">    
+
+  <!-- estas son las principales-->
+
+  <link href="{% static 'css/main.css' %}" type="text/css" rel="stylesheet" />
+  <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+  <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet"/>
+  <link href="{% static 'css/styles_eliminar.css' %}" type="text/css"  rel="stylesheet"/>
+  <link href="{% static 'css/styles_menues.css' %}" type="text/css" rel="stylesheet" />
+  <link href="{% static 'css/styles_pantallas.css' %}" type="text/css" rel="stylesheet" />
+  <link href="{% static 'css/paginador.css' %}" type="text/css" rel="stylesheet" />
+  <link href="{% static 'css/tailwindcss.css' %}" type="text/css" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'css/output.css' %}">
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+</head>
+
+<body>
+
+  <header>
+      
+      <div class="logo" style="display: flex; align-items: center; gap: 15px;">
+          <img src="{% static 'img/logo.png' %}" alt="Logo">
+          <div class="logo-texto">
+              SIGECOMSD <span>Sistema Integral de Gestion</span>
+              <span>Concejo Municipal de San Diego</span>
+          </div>
+      </div>
+
+      {% block nav %}
+      {% endblock nav %}
+
+  </header>
+
+  {% block contenido %}
+
+  {% endblock contenido %}
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <p class="footer-logo">SIGECOMSD <span>2026</span></p>
+        <p class="footer-desc">Sistema Integral de Gestion</p>
+        <p class="footer-desc">Concejo Municipal de San Diego.</p>
+      </div>
+
+      {% if request.resolver_match.url_name == 'home' %}
+        <div class="footer-links">
+          <h4>Navegación</h4>
+          <a href="#hero">Inicio</a>
+          <a href="#features">Objetivos</a>
+          <a href="#testimonials">Descargas</a>
+          <a href="#"><i class="ph ph-house"></i> Entrar</a>
+        </div>
+      {% endif %}
+
+      <div class="footer-social">
+        <h4>Redes Sociales y Enlaces</h4>
+        <a href="https://www.instagram.com/concejodesandiego" target="_blank"><i class="ph ph-instagram-logo"></i> Instagram</a>
+        <a href="https://web.whatsapp.com/" target="_blank"><i class="ph ph-whatsapp-logo"></i> WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 - Desarrollado por Esp. Wilmer Vargas y Lic. Julio Chirinos.</p>
+    </div>
+  </footer>
+
+</body>
+
+</html>

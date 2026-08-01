@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        @page {
+            size: letter landscape;
+            margin: 3cm 1cm 1.5cm 1cm;
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; left: 1cm; right: 1cm; height: 3cm;
+            }
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; left: 1cm; right: 1cm; height: 1cm;
+            }
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #333;
+        }
+        .tabla-principal {
+            width: 100%;
+            border: 0.1pt;
+        }
+        /* Encabezado con azul profesional y letras blancas */
+        .tabla-principal th {
+            background-color: #1a4d94;
+            color: white;
+            padding: 2px 2px;
+            border: 0.1pt;
+            font-size: 8pt;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        /* Celdas principales */
+        /* Esto asegura que todas las celdas base se centren verticalmente */
+        .tabla-principal td {
+            border: 0.4pt solid #ccc;
+            vertical-align: middle; /* Alineación vertical al centro */
+            padding: 1px 1px;      /* Espaciado uniforme arriba y abajo */
+        }
+        /* Estilo para Producto, Cantidad y Monto (Sin Negritas) */
+        .col-resumen {
+            padding: 4px 4px; /* Filas más altas */
+            font-weight: normal; 
+            font-size: 9pt;
+        }
+        .tabla-detalle-interna {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tabla-detalle-interna td {
+            border: none;
+            border-bottom: 0.5pt solid #eee;
+            vertical-align: middle; /* Centrado para las sub-líneas */
+            padding: 3px 2px;       /* Ajusta este valor para dar más "aire" */
+            line-height: 1;       /* Mejora la altura de la línea de texto */
+        }
+
+        /* Tabla de desglose interna */
+        .tabla-desglose {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .tabla-desglose td {
+            border: none;
+            border-bottom: 0.5pt solid #f0f0f0;
+            padding: 8px 2px; /* Filas más altas en el detalle */
+            font-size: 9pt;
+            font-weight: normal;
+            margin-top: 10px;
+        }
+        .tabla-desglose tr:last-child td {
+            border-bottom: none;
+        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .azul { color: #1a4d94; }
+
+        /* Pie de página de totales alineado y limpio */
+        .footer-total {
+            background-color: #f8f9fa;
+            color: #1a4d94;
+        }
+        .footer-total td {
+            padding: 5px 5px;
+            border-top: 1pt solid #1a4d94;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-content">
+        <table style="width: 100%; border: none;">
+            <tr>
+                <td class="header-logo">
+                    <img src="{{ logo_path }}" style="max-height: 1.8cm; width: auto;"/>
+                </td>
+                <td class="header-info">
+                    Emitido: {{ fecha_emision|date:"d/m/Y" }}<br>
+                    Hora: {{ fecha_emision|date:"H:i" }}
+                </td>
+            </tr>
+            <td style="width: 85%; border: none; text-align: center; vertical-align: middle;">
+                <p style="font-size: 12pt; color: #1a4d94; margin: 3px 0; font-weight: bold;">{{ titulo_reporte|upper }}</p>
+            </td>
+        </table>
+        <div style="border-bottom: 1pt solid #1a4d94; margin-top: 2px;"></div>
+    </div>
+
+<table class="tabla-principal">
+    <thead>
+        <tr>
+            <th style="width: 8%;">CODIGO</th>
+            <th style="width: 24%;">INSUMO</th>
+            <th style="width: 8%;">STOCK ACTUAL</th>
+            <th style="width: 8%;">CANT. TOTAL</th>
+            <th style="width: 50%;">
+                <table style="width: 100%; color: white; border: none;">
+                    <tr>
+                        <td style="width: 15%; border: none; font-weight: bold;">N° Requis.</td>
+                        <td style="width: 15%; border: none; font-weight: bold; text-align: center;">Fec. Requi.</td>
+                        <td style="width: 15%; border: none; font-weight: bold; text-align: center;">Fec. Aprob.</td>
+                        <td style="width: 50%; border: none; font-weight: bold; text-align: center;">DEPENDENCIA</td>
+                        <td style="width: 15%; border: none; font-weight: bold; text-align: right;">Cant. Entregada</td>
+                    </tr>
+                </table>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in ranking %}
+        <tr>
+            <td class="col-resumen text-center">{{ item.cod_producto__cod_producto }}</td>
+            <td class="col-resumen">{{ item.cod_producto__descripcion|upper }}</td>
+            <td class="col-resumen text-center azul">{{ item.cod_producto__cantidad|floatformat:2 }}</td>
+            <td class="col-resumen text-center azul">{{ item.total_qty|floatformat:2 }}</td>
+            <td>
+                <table class="tabla-desglose">
+                    {% for d in detalles_raw %}
+                        {% if d.cod_producto_id == item.cod_producto_id %}
+                        <tr>
+                            <td style="width: 15%; text-align: center;">{{ d.encabezado.num_requi }}</td>
+                            <td style="width: 15%; text-align: center;">{{ d.encabezado.fecha_requi|date:"d/m/Y" }}</td>
+                            <td style="width: 15%; text-align: center;">{{ d.encabezado.fecha_aprobacion|date:"d/m/Y"|default:"---" }}</td>
+                            <td style="width: 50%; text-align: center;">{{ d.encabezado.cod_dependencia_soli }}</td>
+                            <td style="width: 15%; text-align: right;">{{ d.cant_entregada|floatformat:2 }}</td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </table>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr class="footer-total">
+            <td colspan="2" style="text-align: right;">TOTALES GENERALES:</td>
+            <td style="text-align: center;">{{ totales_general.t_cant|default:0|floatformat:2 }}</td>
+        </tr>
+    </tfoot>
+</table>
+
+    <div id="footer-content" style="text-align: center; color: #999; font-size: 8pt;">
+        Emitido el: {{ fecha_emision|date:"d/m/Y H:i" }} | Página <pdf:pagenumber/> de <pdf:pagecount/>
+    </div>
+</body>
+</html>

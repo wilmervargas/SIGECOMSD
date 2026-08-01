@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ titulo_reporte }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* 1. CONFIGURACIÓN DE PÁGINA Y MARCOS (Igual a Categorías) */
+            @page {
+                size: letter landscape; /* Se mantiene landscape por la cantidad de columnas */
+                margin: 1cm 1cm 2cm 1cm;
+            }
+            
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; 
+                left: 1.5cm;
+                right: 1cm;
+                height: 2.2cm;
+            }
+
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; 
+                left: 1.5cm;
+                right: 1cm;
+                height: 1cm; 
+            }
+
+            @frame content {
+                top: 3.0cm;
+                left: 1.5cm;
+                right: 1cm;
+                bottom: 1.5cm;
+            }
+
+            /* 2. ESTILOS DE TEXTO Y TABLA (Copiados de Categorías) */
+            body { 
+                font-family: Arial, sans-serif; 
+                font-size: 9pt; /* Ajustado para consistencia */
+                color: #333; 
+            }
+            
+            .header-separator {
+                border-bottom: 2px solid #333;
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 10px;
+            }
+
+            th {
+                background-color: #1a4d94; /* Azul oscuro del reporte de categorías */
+                color: white;              /* Texto blanco */
+                border: 1px solid #ccc;
+                padding: 6px;
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 8.5pt;
+            }
+
+            td {
+                border: 1px solid #ccc;
+                padding: 5px;
+                vertical-align: middle;
+                font-size: 8pt;
+            }
+
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            
+            /* Estilos específicos para badges de stock */
+            .stock-badge {
+                display: block;
+                padding: 2px;
+                margin-bottom: 2px;
+                border-bottom: 0.5px solid #eee;
+            }
+            .low-stock { color: red; font-weight: bold; }
+        </style>
+    </head>
+    <body>
+        <div id="header-content">
+            <div style="display: flex; align-items: center;">
+                <div style="float: left; width: 20%;">
+                    {% if logo_path %}
+                        <img src="{{ logo_path }}" alt="Logo" style="max-width: 100%; height: auto;"/>
+                    {% endif %}
+                </div>
+                <div style="float: left; width: 80%; text-align: center;">
+                    <h2 style="margin: 0; padding-top: 10px;">{{ titulo_reporte | upper }}</h2>
+                </div>
+            </div>
+            <div style="clear: both;"></div> 
+            <div class="header-separator"></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="3%">Nro</th>
+                    <th width="9%">Código</th>
+                    <th width="20%">Descripción</th>
+                    <th width="10%">Categoría</th>
+                    <th width="4%">UND</th>
+                    <th width="12%">Almacén</th>
+                    <th width="7%">Stock Min</th>
+                    <th width="9%">Costo</th>
+                    <th width="9%">Precio</th>
+                    <th width="8%">Cantidad</th>
+                    <th width="9%">Tot.Inversión</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in entity %}
+
+                    <tr>
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td class="text-center"><strong>{{ producto.cod_producto }}</strong></td>
+                        <td>{{ producto.descripcion|upper }}</td>
+                        <td class="text-center">{{ producto.cod_categoria.descripcion|default:"-" }}</td>
+                        <td class="text-center">{{ producto.cod_unidad.cod_unidad|default:"-" }}</td>
+                        <td style="font-size: 8.5pt;">
+                            {% for inventario in producto.inventario_solo_almacen %}
+                            <div class="stock-item" style="font-size: 8.5pt;">
+                                {{ inventario.cod_almacen.descripcion|truncatechars:30 }}
+                            </div>
+                            {% endfor %}
+                        </td>
+                        <td class="text-right" style="font-size: 8.5pt;">
+                            {% for inventario in producto.inventario_solo_almacen %}
+                            <div class="stock-item" style="font-size: 8.5pt;">
+                                {{ inventario.stock_minimo_almacen|default:"0" }}
+                            </div>
+                            {% endfor %}
+                        </td>
+                        <td class="text-right">$ {{ producto.costo_compra|floatformat:2 }}</td>
+                        <td class="text-right">$ {{ producto.precio_venta|floatformat:2 }}</td>
+                        <td class="text-right" style="font-size: 8.5pt;">
+                            {% for inventario in producto.inventario_solo_almacen %}
+                            <div class="stock-item" style="font-size: 8.5pt;">
+                                {{ inventario.cantidad|default:"0" }}
+                            </div>
+                            {% endfor %}
+                        </td>
+                        <td class="text-right">$ {{ producto.total_inversion|floatformat:2 }}</td>
+                        
+                    </tr>
+
+                    {% endfor %}
+            </tbody>
+
+            <tfoot>
+                <tr style="background-color: #f2f2f2; font-weight: bold; border-top: 2px solid #1a4d94;">
+                    <td colspan="7" class="text-right" style="font-size: 8.5pt;">TOTALES GENERALES:</td>
+                    <td class="text-right">$ {{ totales.total_costo|floatformat:2|default:"0" }}</td>
+                    <td class="text-right">$ {{ totales.total_precio|floatformat:2|default:"0" }}</td>
+                    <td class="text-right">{{ totales.total_stock|floatformat:2|default:"0" }}</td>
+                    <td class="text-right">$ {{ totales.total_inversion_gral|floatformat:2|default:"0" }}</td>
+                </tr>
+            </tfoot>
+
+        </table>
+        
+        <div style="margin-top: 10px;">
+            <span style="float: left;">Emitido el: {{ fecha_emision|date:"d/m/Y H:i" }}</span>
+            <span style="float: right;"><strong>Total productos:</strong> {{ entity|length }}</span>
+        </div>
+    </body>
+</html>
+
+                        <td class="text-center">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.path }}" style="width: 40px; height: 35px; object-fit: contain;"/>
+                            {% else %}
+                                <span style="color: #ccc;"></span>
+                            {% endif %}
+                        </td>

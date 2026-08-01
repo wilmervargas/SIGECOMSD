@@ -1,0 +1,97 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block nav %}
+    <nav style="display: flex; justify-content: space-between; align-items: right; padding: 10px 20px;">
+      <ul class="menu-principal">
+        <li><a href="#hero">Inicio</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#features">Objetivos</a></li>
+        <li><a href="#downloads">Descargas</a></li>
+        <li><a href="{% url 'login' %}"><i class="ph ph-house"></i> Entrar</a></li>
+      </ul>
+    </nav>
+    {% endblock nav %}
+
+  {% block contenido %}
+
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Bienvenid@s al <span>Sistema Integral de Gestion Concejo Municipal de San Diego</span></h1>
+      <p>Registro de Gestión e Información, y demás documentos relacionados.</p>
+      <a href="{% url 'login' %}" class="btn"><i class="ph ph-rocket"></i> Comenzar ahora</a>
+    </div>
+  </section>
+
+  <section id="nosotros">
+    <h2>Nuestros servicios</h2>
+    <div class="testimonials-list">
+
+      <div class="testimonial-card">
+        <div class="avatar">NS</div>
+        <div>
+          <p class="quote">El Concejo Municipal de San Diego es el órgano legislativo del municipio en Carabobo, Venezuela, encargado de dictar ordenanzas, ejercer control político y aprobar planes locales.<br>
+            Funciones Principales.<br>
+            Legislar: Crear, aprobar y modificar ordenanzas, acuerdos y reglamentos para regir la vida local y la convivencia ciudadana.<br>
+            
+            Controlar: Vigilar y fiscalizar las acciones del poder ejecutivo municipal (la Alcaldía) y el uso de los recursos públicos.<br>
+            Organizar comisiones: Trabajar mediante comisiones permanentes en áreas como servicios públicos, economía local y participación ciudadana.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="features">
+    <h2>Objetivos y Alcances</h2>
+    <div class="features-list">
+      <div class="feature-card">
+        <div class="icon"><i class="ph ph-rocket"></i></div>
+        <h3>Propósito</h3>
+        <p style="text-align: justify;">Utilizar una aplicación informática que sirva de registro de las requisiciones de materiales e insumos, asi como de las Gacetas nacionales, regionales y locales relacionadas del Concejo Municipal de San Diego, y del mismo modo llevar registos de Organización y Métodos.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><i class="ph ph-chalkboard-teacher"></i></div>
+        <h3>Alcance</h3>
+        <p style="text-align: justify;">Inicia con la introducción de los datos en la aplicación y culmina con la impresión y archivo de los reportes generados por la misma. Es un sistema flexible que se adapta a las necesidades cambiantes del Organo.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon"><i class="ph ph-scroll"></i></div>
+        <h3>Descripción</h3>
+        <p style="text-align: justify;">El SIGECOMSD maneja una base de datos que tiene la finalidad de llevar el control de la elaboración y actualizaciones de las Requisiciones de Materiales e Insumos, Biblioteca Juridica donde se registran las Gacetas y demas normativa regiona y nacional, y lleva registros de manuales, formularios, protocolos y demas insumos relacionados con Organizacion y Metodos;
+          y cualquier otro tipo de registro que se vinculen con este sistema.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="downloads">
+    <h2>Descarga General de normas jurídicas</h2>
+    <div class="testimonials-list">
+      <div class="testimonial-card">
+        <div class="avatar">NR</div>
+        <div>
+          <p class="quote">"Norma rectora y demás normas relacionadas"</p>
+          <a href="/static/pdf/Constitucion Republica Bolivariana de Venezuela 1999.pdf" target="_blank" style="text-decoration: underline; color: #0284c7;"> Constitución de la República Bolivariana de Venezuela de 1999</a><br>
+          <a href="/static/pdf/ley-del-estatuto-funcion-publica-20220303135020.pdf" target="_blank" style="text-decoration: underline; color: #0284c7;"> Ley de Estatuto de la Función Pública vigente</a><br>
+          <a href="/static/pdf/ley-de-poder-publico-municipal-20220117174750.pdf" target="_blank" style="text-decoration: underline; color: #0284c7;"> Ley Orgánica del Poder Público Municipal vigente</a><br>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="avatar">NI</div>
+        <div>
+          <p class="quote">"Creación, Estructura Organica y Funcionamiento del Concejo Municipal de San Diego"</p>
+          <a href="#" target="_blank" style="text-decoration: underline; color: #0284c7;"> Ordenanza de Creacion Concejo Municipal 1996</a><br>
+          <a href="#" target="_blank" style="text-decoration: underline; color: #0284c7;"> Ordenanza de Creacion Concejo Municipal vigente</a><br>
+          <a href="#" target="_blank" style="text-decoration: underline; color: #0284c7;"> Reglamento Interno de Funcionamiento Concejo Municipalvigente vigente</a><br>
+          <a href="#" target="_blank" style="text-decoration: underline; color: #0284c7;"> Reglamento Interior y de Debate vigente</a><br>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  {% endblock contenido %}

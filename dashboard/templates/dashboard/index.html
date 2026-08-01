@@ -1,0 +1,104 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+    {% block nav %}
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
+      <ul class="menu-principal">
+        {# --- MÓDULO TABLAS --- #}
+        {# Se muestra si es Superusuario O si tiene al menos un permiso de lectura en tablas #}
+        {% if user.is_superuser or user.is_staff %}
+        <li>
+          <a href="#"><i class="ph ph-table text-lg"></i> Tablas <i class="ph ph-caret-down"></i></a>
+          <ul class="submenu">
+            {% if user.is_superuser or perms.inventario.view_categoria %}
+              <li><a href="{% url 'listado_categoria' %}"><i class="ph ph-tag text-lg"></i> Categorías</a></li>
+            {% endif %}
+            
+            {% if user.is_superuser or perms.inventario.view_unidadmedida %}
+              <li><a href="{% url 'listado_unidad' %}"><i class="ph ph-ruler text-lg"></i> Unidad Medida</a></li>
+            {% endif %}
+
+            {% if user.is_superuser or perms.inventario.view_dependencia %}
+              <li><a href="{% url 'listado_dependencias' %}"><i class="ph ph-buildings text-lg"></i> Dependencias/Unidades</a></li>
+            {% endif %}
+
+            {% if user.is_superuser or perms.inventario.view_director %}
+              <li><a href="{% url 'listado_directores' %}"><i class="ph ph-users text-lg"></i> Directores/Solicitantes</a></li>
+            {% endif %}
+
+            {% if user.is_superuser or perms.inventario.view_proveedor %}
+              <li><a href="{% url 'listado_proveedores' %}"><i class="ph ph-package text-lg"></i> Proveedores</a></li>
+            {% endif %}
+          </ul>
+        </li>
+        {% endif %}
+
+        {# --- MÓDULO REQUISICIONES --- #}
+        {% if perms.salidas.view_salidaencabezado %}
+        <li>
+          <a href="#"><i class="ph ph-package"></i> Requisiciones <i class="ph ph-caret-down"></i></a>
+          <ul class="submenu">
+            {% if user.is_superuser or perms.inventario.view_producto %}
+              <li><a href="{% url 'listado_productos' %}"><i class="ph ph-package text-lg"></i> Insumo/Carga Inicial</a></li>
+            {% endif %}
+
+            {% if perms.salidas.view_salidaencabezado %}
+              <li><a href="{% url 'listado_salidas' %}"><i class="ph ph-clipboard-text text-lg"></i> Requisiciones</a></li>
+            {% endif %}
+
+            {% if user.is_superuser or perms.inventario.view_compra %}
+              <li><a href="{% url 'listado_entradas' %}"><i class="ph ph-truck text-lg"></i> Compras/Reposiciones</a></li>
+            {% endif %}
+
+            {% if user.is_superuser or perms.inventario.view_ranking %}
+              <li><a href="{% url 'listado_ranking_salidas' %}"><i class="ph ph-clipboard-text text-lg"></i> Ranking</a></li>
+            {% endif %}
+          </ul>
+        </li>
+        {% endif %}
+
+        {# --- BIBLIOTECA JURÍDICA (Exclusivo Superusuario) --- #}
+        {% if user.is_superuser %}
+          <li><a href="{% url 'listado_baselegal' %}"><i class="ph ph-device-mobile"></i> Biblioteca Jurídica</a></li>
+        {% endif %}
+
+        {# --- MÓDULO O.y.M. --- #}
+        {% if user.is_superuser or perms.inventario.can_access_oym %}
+        <li>
+          <a href="#"><i class="ph ph-package"></i> O.y.M. <i class="ph ph-caret-down"></i></a>
+          <ul class="submenu">
+            <li><a href="{% url 'listado_manuales' %}"><i class="ph ph-desktop"></i> Manuales</a></li>
+            <li><a href="{% url 'listado_procedimientos' %}"><i class="ph ph-device-mobile"></i> Procedimientos</a></li>
+            <li><a href="{% url 'listado_protocolos' %}"><i class="ph ph-device-mobile"></i> Protocolos</a></li>
+            <li><a href="{% url 'listado_formularios' %}"><i class="ph ph-device-mobile"></i> Formularios</a></li>
+          </ul>
+        </li>
+        {% endif %}
+
+        {# --- CERRAR SESIÓN --- #}
+        <li><a href="{% url 'logout' %}"><i class="ph ph-lock"></i> Cerrar</a></li>
+
+        {# --- PANEL DE ADMINISTRACIÓN (Solo Superuser) --- #}
+        {% if user.is_superuser %}
+          <li>
+            <a href="{% url 'admin:index' %}">
+              <i class="ph ph-user-gear"></i> Admin
+            </a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </nav>
+    {% endblock nav %}
+    
+{% block contenido %}
+  
+  <section id="hero">
+    <div class="hero-content">
+      <h1>Bienvenid@s al <span>Sistema de Control de Inventario de Materiales e Insumos</span></h1>
+      <p>Registro de Requisiciones de Materiales e Insumos, y demás documentos relacinados.</p>
+    </div>
+  </section>
+
+{% endblock contenido %}

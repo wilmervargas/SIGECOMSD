@@ -1,0 +1,26 @@
+pyinstaller --name "InvRequisiciones" `
+--add-data "templates;templates" `
+--add-data "static;static" `
+--collect-submodules django `
+--collect-all reportlab `
+--collect-all xhtml2pdf `
+--hidden-import reportlab.graphics.barcode.code128 `
+--hidden-import reportlab.graphics.barcode.code39 `
+--hidden-import reportlab.graphics.barcode.usps `
+--hidden-import maininv.wsgi `
+--hidden-import maininv.middleware `
+--hidden-import maininv.urls `
+--hidden-import categorias `
+--hidden-import dashboard `
+--hidden-import dependencias `
+--hidden-import directores `
+--hidden-import entradas `
+--hidden-import estadisticas `
+--hidden-import home `
+--hidden-import login `
+--hidden-import productos `
+--hidden-import proveedores `
+--hidden-import salidas `
+--hidden-import unidades `
+--hidden-import utilidades `
+run_server.py

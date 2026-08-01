@@ -1,0 +1,107 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/reportes.css' %}"/>
+</head>
+<body>
+
+    <div id="header-content">
+        <table style="width: 100%; border: none;">
+            <tr>
+                <td class="header-logo" style="width: 70%; border: none; vertical-align: middle;">
+                    {% if logo_path %}
+                        <img src="{{ logo_path }}" style="height: 65px; width: auto;"/>
+                    {% endif %}
+                </td>
+                <td class="header-info" style="width: 30%; border: none; text-align: right; font-size: 8pt; vertical-align: middle; color: #555;">
+                    Emitido: {{ fecha_emision|date:"d/m/Y" }}<br>
+                    Hora: {{ fecha_emision|date:"H:i" }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="width: 100%; border: none; text-align: center; vertical-align: middle;">
+                    <p style="font-size: 14pt; color: #1a4d94; margin: 8px 0 0 0; font-weight: bold;">
+                        {{ titulo_reporte|upper }}
+                    </p>
+                </td>
+            </tr>
+        </table>
+        
+        <div style="border-bottom: 1pt solid #1a4d94; margin-top: 5px; margin-bottom: 8px;"></div>
+    </div>
+
+    <table class="tabla-principal" style="width: 100%; border-collapse: collapse;">
+        <thead>
+            <tr style="font-size: 8pt;"> <th style="width: 8%; text-align: center;">NUMERO</th>
+                <th style="width: 20%; text-align: center;">TÍTULO</th>
+                <th style="width: 6%; text-align: center;">FEC. APROB.</th>
+                <th style="width: 6%; text-align: center;">NO. GACETA</th>
+                <th style="width: 6%; text-align: center;">FEC. PUBLIC.</th>
+                <th style="width: 8%; text-align: center;">TIPO</th>
+                <th style="width: 15%; text-align: center;">ORGANO QUE PUBLICA</th>
+                <th style="width: 5%; text-align: center;">DIST. DIGITAL</th>
+                <th style="width: 5%; text-align: center;">DIST. FÍSICA</th>
+                <th style="width: 20%; text-align: center;">OBSERVACIONES</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in baselegal %}
+            <tr>
+                <td class="col-resumen text-center">
+                    {{ item.cod_baselegal }}
+                </td>
+                
+                <td class="col-resumen text-left">
+                    {{ item.titulo|upper }}
+                </td>
+                
+                <td class="col-resumen text-center">
+                    {{ item.fecha_aprobacion|date:"d/m/Y" }}
+                </td>
+
+                <td class="col-resumen text-center">
+                    {{ item.nro_gaceta }}
+                </td>
+                <td class="col-resumen text-center">
+                    {{ item.fecha_publicacion|date:"d/m/Y" }}
+                </td>
+                <td class="col-resumen text-center">
+                    {{ item.get_tipo_display }}
+                </td>
+                <td class="col-resumen text-center">
+                    {{ item.get_organo_publica_display }}
+                </td>
+                <td class="col-resumen text-center">
+                    {% if item.distribucion_digital %}SI{% else %}NO{% endif %}
+                </td>
+                <td class="col-resumen text-center">
+                    {% if item.distribucion_fisica %}SI{% else %}NO{% endif %}
+                </td>
+
+                <td class="col-resumen text-left" style="color: #555;">
+                    {% if item.observaciones %}
+                        {{ item.observaciones|upper }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="col-resumen text-center" style="padding: 15px; color: red; font-weight: bold;">
+                    No se encontraron registros de baselegal para mostrar.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="footer-content" style="text-align: center; color: #999; font-size: 8pt;">
+        Página <pdf:pagenumber/> de <pdf:pagecount/>
+    </div>
+
+</body>
+</html>

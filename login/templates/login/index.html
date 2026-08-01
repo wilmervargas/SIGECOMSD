@@ -1,0 +1,131 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    {{titulo}}    
+{% endblock titulo %}
+
+{% block contenido %}
+
+    <section id="two" class="wrapper style2" style="padding: 0em 0 0em 0;">
+        <div class="inner">
+            <div class="box">
+                <div class="content">
+                    <form method="post" id="loginForm" autocomplete="off"><h3 style="text-align: center;">Introduzca sus Datos</h3>
+                        {% csrf_token %}
+
+                        <input type="text" name="dummy-username" id="dummy-username" style="width: 1px; height: 1px; border: 0; padding: 0; position: absolute; left: -9999px;" autocomplete="off" tabindex="-1">
+                        <input type="password" name="dummy-password" id="dummy-password" style="width: 1px; height: 1px; border: 0; padding: 0; position: absolute; left: -9999px;" autocomplete="off" tabindex="-1">
+                        <div class="12u$" style="padding: 1em 0 1em 0;">
+                            <label for="username" style="font-size: 1em; text-align: center; display: block;">Nombre de usuario</label>
+                            <input type="text" 
+                                name="username" 
+                                id="username" 
+                                value="" 
+                                placeholder=""
+                                style="width: 50%; font-size: 1em; max-width: 300px; display: block; margin: 0 auto;" 
+                                autocomplete="off"
+                                readonly 
+                                onfocus="this.removeAttribute('readonly'); this.value='';" />
+                        </div>
+
+                        <div class="12u$" style="padding: 1em 0 1em 0;">
+                            <label for="password" style="font-size: 1em; text-align: center; display: block;">Contraseña</label>
+                            <input type="password" 
+                                name="password" 
+                                id="password" 
+                                value="" 
+                                placeholder="" 
+                                style="width: 50%; font-size: 1em; max-width: 300px; display: block; margin: 0 auto;"
+                                autocomplete="off"
+                                readonly
+                                onfocus="this.removeAttribute('readonly'); this.value=''; this.type='text'; setTimeout(() => {this.type='password'}, 50);" />
+                        </div>
+
+                        <div class="12u$" style="padding: 1em 0 1em 0; width: 100%; max-width: 400px; margin: 0 auto; display: flex; justify-content: center; gap: 20px;">
+                            <div>
+                                <input type="checkbox" id="human" name="human">
+                                <label for="human" style="color: black;">No soy un robot</label>
+                            </div>
+                        </div>
+
+                        <div class="12u$" style="padding: 2em 0 2em 0;">
+                            <ul class="actions align-center">
+                                <li><input type="submit" style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" type="submit" class="button special icon" id="btnSubmit" value="Iniciar sesión" disabled /></li>
+                                <li><input type="reset" id="btnBorrar" value="Borrar datos" style="background-color: #dc2626; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;" class="alt button special icon" /></li>
+                                <a href="#" onclick="history.back(); return false;" style="background-color: #0b2df0; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;" class="button special icon fa-arrow-left">Retornar</a>
+                            </ul>
+                        </div>
+
+                        <div class="12u$ align-center" style="padding: 1em 0 1em 0;">
+                            <a href="#">Si Olvidaste tu contraseña, comunicate con el Administrador del sistema</a>
+                        </div>
+                        <div class="12u$ align-center">
+                            <h3 id="mensaje-alerta" style="color: #d80606;">{{msj}}</h3>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- LOS SCRIPTS -->
+<!-- LOS SCRIPTS -->
+    <script>
+        // --- CÓDIGO NUEVO PARA ACTIVAR EL BOTÓN ---
+        const checkboxHuman = document.getElementById('human');
+        const btnSubmit = document.getElementById('btnSubmit');
+        const btnBorrar = document.getElementById('btnBorrar');
+
+        if (checkboxHuman && btnSubmit) {
+            checkboxHuman.addEventListener('change', function() {
+                // Si está marcado, disabled pasa a ser false (se activa)
+                btnSubmit.disabled = !this.checked;
+            });
+        }
+
+        if (btnBorrar && btnSubmit) {
+            btnBorrar.addEventListener('click', function() {
+                // Al limpiar los datos, volvemos a bloquear el botón
+                btnSubmit.disabled = true;
+            });
+        }
+        // --- FIN DEL CÓDIGO NUEVO ---
+
+
+        // FUNCIÓN MEJORADA PARA LIMPIAR CAMPOS AL ENTRAR (Usa pageshow y readonly)
+        window.addEventListener('pageshow', function(event) {
+            var usernameField = document.getElementById('username');
+            var passwordField = document.getElementById('password');
+            
+            setTimeout(function() {
+                if (usernameField) {
+                    usernameField.value = '';
+                    usernameField.removeAttribute('readonly');
+                }
+                if (passwordField) {
+                    passwordField.value = '';
+                    passwordField.removeAttribute('readonly');
+                }
+                if (usernameField) {
+                    usernameField.focus();
+                }
+            }, 50);
+        });
+        
+        // Ocultar mensaje de alerta
+        var mensaje = document.getElementById('mensaje-alerta');
+        if (mensaje && mensaje.textContent.trim().length > 0) {
+            function ocultarMensaje() {
+                mensaje.style.display = 'none';
+                document.removeEventListener('keydown', ocultarMensaje);
+                document.removeEventListener('click', ocultarMensaje);
+            }
+            document.addEventListener('keydown', ocultarMensaje);
+            document.addEventListener('click', ocultarMensaje);
+        }
+    </script>
+
+{% endblock contenido %}

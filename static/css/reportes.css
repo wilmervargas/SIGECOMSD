@@ -1,0 +1,74 @@
+
+/* para el reporte */
+@page {
+    size: letter landscape;
+    /* AJUSTE: Aumentamos el margen superior a 4.5cm para dar espacio a la fila de títulos repetida */
+    margin: 3cm 1cm 1cm 1cm;
+    
+    @frame header {
+        -pdf-frame-content: header-content;
+        /* AJUSTE: Ampliamos el alto del marco a 3.9cm para que entren los logos, el título y los encabezados azules */
+        top: 0.5cm; left: 1cm; right: 1cm; height: 3.9cm;
+    }
+    @frame footer {
+        -pdf-frame-content: footer-content;
+        bottom: 0.5cm; left: 1cm; right: 1cm; height: 1cm;
+    }
+}
+body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    color: #333;
+}
+.tabla-principal {
+    width: 100%;
+    border-collapse: collapse; /* Forzar colapso evita que xhtml2pdf desfase celdas */
+}
+/* Encabezado con azul profesional y letras blancas */
+.tabla-principal th {
+    background-color: #1a4d94;
+    color: white;
+    padding: 5px 5px 5px 5px; 
+    border: 0.1pt solid #1a4d94;
+    font-size: 8pt;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+/* Celdas principales */
+.tabla-principal td {
+    border: 0.4pt solid #ccc;
+    vertical-align: middle; 
+}
+.col-resumen {
+    padding: 4px 4px; 
+    font-weight: normal; 
+    font-size: 7pt;
+}
+
+/* Estilos de las tablas internas por si los usas en otros módulos */
+.tabla-detalle-interna {
+    width: 100%;
+    border-collapse: collapse;
+}
+.tabla-detalle-interna td {
+    border: none;
+    border-bottom: 0.5pt solid #eee;
+    vertical-align: middle; 
+    padding: 2px 2px; 
+    line-height: 1; 
+}
+.tabla-desglose {
+    width: 100%;
+    border-collapse: collapse;
+}
+.tabla-desglose td {
+    border: none;
+    border-bottom: 0.5pt solid #f0f0f0;
+    padding: 4px 4px; 
+    font-size: 7pt;
+    font-weight: normal;
+}
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.azul { color: #1a4d94; }

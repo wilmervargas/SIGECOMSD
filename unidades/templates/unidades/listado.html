@@ -1,0 +1,322 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo %}
+    {{ titulo }}
+{% endblock titulo %}
+
+{% block contenido %}
+
+    <section id="three" style="width: 80%;
+            max-width: none !important;
+            margin-top: 10px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;">
+        <div>
+            <h4 style="color:white; text-align:center; font-weight:bold; margin-top: 5px; margin-bottom: 5px;">LISTADO DE UNIDADES DE MEDIDAS</h4>
+        </div>
+
+        <header class="align-center" style="
+            display: flex; 
+            gap: 5px; 
+            justify-content: center; 
+            padding: 0px 0; margin-top: -8px; margin-bottom: 0px;">
+            
+            <a href="{% url 'crear_unidad' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                class="button special icon fa-plus" 
+                title="Nuevo registro"
+                style="
+                    background-color: #0b2df0; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center;
+                    margin-top: 10px;">Agregar
+            </a>
+
+            <a href="{% url 'reporte_unidades_pdf' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button special icon fa-file-pdf-o"
+                title="Exportar a PDF"
+                style="
+                    background-color: #d80606; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">PDF
+            </a> 
+            
+            <a href="{% url 'reporte_unidades_excel' %}?order_by={{ order_by }}&{{ full_query_string }}"
+                class="button special icon fa-file-excel-o"
+                title="Exportar a Excel enriquecido"
+                style="
+                    background-color: #10a33c; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">Excel
+            </a> 
+            
+            <div class="align-right">
+                <a href="{% url 'dashboard' %}" 
+                    class="button special icon fa-arrow-left" 
+                    style="
+                        background-color: #0b2df0; 
+                        color: white;
+                        padding: 2px 4px;
+                        width: 70px;
+                        font-size: 1.0em; 
+                        border-radius: 6px; 
+                        transition: all 0.2s;
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        margin-top: 10px;">Salir</a>
+            </div>
+        </header>
+
+            <div class="inner" style="max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important;">
+                <div class="box" style="margin-top: 0px; margin-bottom: 0px; border-radius: 10px !important; width: 100% !important; padding: 0 !important;">
+                    <div class="content" style="padding: 0 !important; width: 100% !important; justify-content: center;">
+                    
+                        <!-- Banda azul reducida en altura -->
+                        <div class="align-center" style="margin-top: 0px; border: 0px solid white; padding: 2px 15px; border-radius: 5px; background-color: rgba(31, 146, 192, 0.247); width: 100% !important; box-sizing: border-box;">
+                            
+                            <form method="get" action="{% url 'listado_unidad' %}" style="margin: 0 !important; padding: 0 !important; width: 100%;">
+                            <input type="hidden" name="order_by" value="{{ order_by }}">
+                            
+                            <div style="margin-bottom: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 15px; padding-left: 15px;">
+                                <div style="flex: 1; max-width: 25%; margin-top: 0px; margin-right: auto; text-align: left;"> 
+                                    {{ filter_form.search_query.label_tag }}
+                                    {{ filter_form.search_query }}
+                                </div>
+
+                                <div style="min-width: 30px; max-width: 30px">
+                                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                                        <button type="submit" 
+                                                class="button special btn-filter" 
+                                                title="Aplicar Filtros" 
+                                                style="
+                                                    background-color: #3e858e; 
+                                                    color: white; 
+                                                    width: 40px; 
+                                                    height: 40px; 
+                                                    padding: 0;
+                                                    border-radius: 50%; 
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;">
+                                            <i class="fa fa-filter"></i>
+                                        </button>
+                                        
+                                        <a href="{% url 'listado_unidad' %}?order_by={{ order_by }}" 
+                                            class="button special btn-filter" 
+                                            title="Limpiar Filtros" 
+                                            style="
+                                                background-color: #9c9c9c; 
+                                                color: white; 
+                                                width: 40px; 
+                                                height: 40px; 
+                                                padding: 0;
+                                                border-radius: 50%; 
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                                <i class="fa fa-refresh"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <tr>
+                        {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                    </tr>
+                </div>
+
+                <div class="col-12" style="overflow-x: auto;">
+                    <div class="table-wrapper">
+                        <table class="alt">
+                            <thead>
+                                <tr>
+                                    <th style="width: 15%; font-size: 0.8em; font-weight: bold; text-align: center;">Código
+                                        <a href="?order_by=cod_unidad{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                        <a href="?order_by=-cod_unidad{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                    </th>
+                                    <th style="width: 40%; font-size: 0.8em; font-weight: bold; text-align: left;">Descripción
+                                        <a href="?order_by=descripcion{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                        <a href="?order_by=-descripcion{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                    </th>
+                                    <th style="width: 40%; font-size: 0.8em; font-weight: bold; text-align: left;">Observaciones
+                                        <a href="?order_by=observaciones{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                        <a href="?order_by=-observaciones{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                    </th>
+                                    <th style="width: 10%; font-size: 0.8em; font-weight: bold; text-align: center;">Acción</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for unidad in entity %}
+                                <tr>
+                                    <td style="text-align: center;">{{ unidad.cod_unidad|default:"-" }}</td>
+                                    <td style="text-align: left;">{{ unidad.descripcion|default:"-" }}</td>
+                                    <td style="text-align: left;"><small>{{ unidad.observaciones|default:"" }}</small></td>
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <div class="action-buttons-group">
+                                            <a href="{% url 'editar_unidad' id=unidad.id %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                                                title="Editar" 
+                                                class="icon fa-edit action-link" 
+                                                style="color: #0b2df0; font-size: 1.4em;"></a>
+                                            <a href="javascript:void(0);" 
+                                                onclick="openModal('{% url 'borrar_unidad' id=unidad.id %}?order_by={{ order_by }}&{{ full_query_string }}', 'Unidad {{ unidad.cod_unidad }}');" 
+                                                title="Eliminar" 
+                                                class="icon fa-trash action-link" 
+                                                style="color: #d80606; font-size: 1.4em;"></a> 
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" style="text-align: center;">No hay Unidades que coincidan con los criterios de búsqueda.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div>
+                    <tr>
+                        {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                    </tr>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de confirmación -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Confirmar eliminación</h3> 
+            <p class="alerta-icono" style="color: #eee;">❌</p>        
+            <p class="alerta-mensaje">¿Estás seguro de que deseas eliminar la: <strong id="deleteEntityName"></strong>? Toda la data histórica vinculada se perderá de forma irreversible.</p>
+            <div class="modal-buttons">
+                <a href="#" class="cancel-btn cancelar">Cancelar</a>
+                <a id="confirmDeleteLink" href="#" class="modal-btn confirmar">Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor de mensajes flash -->
+    <div id="message-container" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; padding: 10px 20px; pointer-events: none;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="
+                    pointer-events: auto;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+                    background-color: {% if 'error' in message.tags %}#f8d7da{% else %}#d1ecf1{% endif %};
+                    color: {% if 'error' in message.tags %}#721c24{% else %}#0c5460{% endif %};
+                    border: 1px solid {% if 'error' in message.tags %}#f5c6cb{% else %}#bee5eb{% endif %};
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    transition: opacity 0.5s ease;">
+                    
+                    <span>{{ message|safe }}</span>
+                    <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 1.5em; cursor: pointer;">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+        const deleteModal = document.getElementById("deleteModal");
+        const confirmDeleteLink = document.getElementById("confirmDeleteLink");
+        const deleteEntityName = document.getElementById("deleteEntityName");
+
+        // --- PERSISTENCIA DE SCROLL ---
+        window.addEventListener('load', function() {
+            const scrollPos = localStorage.getItem('scrollPosition');
+            if (scrollPos) {
+                setTimeout(() => {
+                    window.scrollTo({ top: parseInt(scrollPos), behavior: 'auto' });
+                    localStorage.removeItem('scrollPosition');
+                }, 50);
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('action-link') || e.target.closest('.action-link')) {
+                localStorage.setItem('scrollPosition', window.scrollY);
+            }
+        });
+
+        document.querySelectorAll('.pagination a, .btn-filter').forEach(link => {
+            link.addEventListener('click', () => localStorage.removeItem('scrollPosition'));
+        });
+
+        // --- LÓGICA MODAL ---
+        function openModal(deleteUrl, entityName) {
+            localStorage.setItem('scrollPosition', window.scrollY);
+            confirmDeleteLink.href = deleteUrl;
+            deleteEntityName.textContent = entityName;
+            deleteModal.style.display = "flex"; 
+        }
+
+        document.querySelector(".close-btn").onclick = () => deleteModal.style.display = "none";
+        document.querySelectorAll(".cancel-btn").forEach(btn => btn.onclick = () => deleteModal.style.display = "none");
+        
+        window.onclick = (event) => {
+            if (event.target == deleteModal) deleteModal.style.display = "none";
+        }
+
+        // --- MENSAJES FLASH ---
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('message-container');
+            const alerts = container.querySelectorAll('.alert');
+
+            if (alerts.length > 0) {
+                const desaparecer = () => {
+                    alerts.forEach(a => {
+                        a.style.opacity = "0";
+                        setTimeout(() => a.remove(), 500);
+                    });
+                };
+                setTimeout(desaparecer, 5000);
+                document.addEventListener('keydown', desaparecer, { once: true });
+                document.addEventListener('mousedown', desaparecer, { once: true });
+            }
+        });
+    </script>
+
+{% endblock contenido %}

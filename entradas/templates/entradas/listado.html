@@ -1,0 +1,560 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo %}
+    {{ titulo }}
+{% endblock titulo %}
+
+{% block contenido %}
+
+    <section id="three" style="width: 98%;
+            max-width: none !important;
+            margin-top: 10px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;">
+        <div>
+            <h4 style="color:white; text-align:center; font-weight:bold; margin-top: 5px; margin-bottom: 5px;">LISTADO DE REPOSICIONES</h4>
+        </div>
+
+        <header class="align-center" style="
+            display: flex; 
+            gap: 5px; 
+            justify-content: center; 
+            padding: 0px 0; margin-top: -8px; margin-bottom: 0px;">
+            
+            <a href="{% url 'crear_entradas' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                class="button special icon fa-plus"
+                title="Nuevo registro"
+                style="
+                    background-color: #0b2df0; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center;
+                    margin-top: 10px;">Agregar
+            </a>
+
+            <a href="{% url 'reporte_entradas_pdf' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button special icon fa-file-pdf-o"
+                title="Exportar a PDF"
+                style="
+                    background-color: #d80606; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">PDF
+            </a> 
+            
+            <a href="{% url 'reporte_entradas_excel' %}?order_by={{ order_by }}&{{ full_query_string }}"
+                class="button special icon fa-file-excel-o"
+                title="Exportar a Excel enriquecido"
+                style="
+                    background-color: #10a33c; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">Excel
+            </a> 
+
+            <div class="align-right">
+                <a href="{% url 'dashboard' %}" 
+                    class="button special icon fa-arrow-left" 
+                    style="
+                        background-color: #0b2df0; 
+                        color: white;
+                        padding: 2px 4px;
+                        width: 70px;
+                        font-size: 1.0em; 
+                        border-radius: 6px; 
+                        transition: all 0.2s;
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        margin-top: 10px;">Salir</a>
+            </div>
+        </header>
+
+            <div class="inner" style="max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important;">
+                <div class="box" style="margin-top: 0px; margin-bottom: 0px; border-radius: 10px !important; width: 100% !important; padding: 0 !important;">
+                    <div class="content" style="padding: 0 !important; width: 100% !important; justify-content: center;">
+                    
+                        <!-- Banda azul reducida en altura -->
+                        <div class="align-center" style="margin-top: 0px; border: 0px solid white; padding: 2px 15px; border-radius: 5px; background-color: rgba(31, 146, 192, 0.247); width: 100% !important; box-sizing: border-box;">
+                            
+                            <form method="get" action="{% url 'listado_entradas' %}" style="margin: 0 !important; padding: 0 !important; width: 100%;">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 5px;">
+                                <div style="flex: 1; min-width: 100px; max-width: 8%; margin-top: 5px;">
+                                    {{ filter_form.num_orden.label_tag }}
+                                    {{ filter_form.num_orden }}
+                                </div>
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    {{ filter_form.estado.label_tag }}
+                                    {{ filter_form.estado }}
+                                </div>
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    {{ filter_form.fec_orden.label_tag }}
+                                    {{ filter_form.fec_orden }}
+                                </div>
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    {{ filter_form.num_factura.label_tag }}
+                                    {{ filter_form.num_factura }}
+                                </div>
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    {{ filter_form.fec_factura.label_tag }}
+                                    {{ filter_form.fec_factura }}
+                                </div>
+                                <div style="flex: 1; min-width: 100px; max-width: 30%; margin-top: 5px;">
+                                    {{ filter_form.ced_proveedor.label_tag }}
+                                    {{ filter_form.ced_proveedor }}
+                                </div>
+                            
+                                <div style="min-width: 30px; max-width: 30px">
+                                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                                        
+                                        <button type="submit" 
+                                            class="button special" 
+                                            title="Aplicar Filtros" 
+                                            style="
+                                                background-color: #3e858e; 
+                                                color: white; 
+                                                width: 40px; /* Tamaño del botón */
+                                                height: 40px; /* Altura igual al ancho para círculo */
+                                                padding: 0;
+                                                border-radius: 50%; /* ¡Lo hace circular! */
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                            <i class="fa fa-filter"></i>
+                                        </button>
+                                        
+                                        <a href="{% url 'listado_entradas' %}" 
+                                            class="button special" 
+                                            title="Limpiar Filtros" 
+                                            style="
+                                                background-color: #9c9c9c; 
+                                                color: white; 
+                                                width: 40px; 
+                                                height: 40px; 
+                                                padding: 0;
+                                                border-radius: 50%; /* ¡Lo hace circular! */
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                                <i class="fa fa-refresh"></i>
+                                        </a>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <div>
+
+                <tr>
+                    {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                </tr>
+            </div>
+
+                    <div class="col-12" style="overflow-x: auto;">
+                        <div class="table-wrapper">
+                            <table class="alt">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 8%; text-align: center;">N° Orden
+                                            <a href="?order_by=num_orden&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                            
+                                            <a href="?order_by=-num_orden&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">Status
+                                            <a href="?order_by=estado&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                            
+                                            <a href="?order_by=-estado&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-down" title="Ordenar Desc."></a>
+
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">Fecha Orden
+                                            <a href="?order_by=fecha_orden&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                            
+                                            <a href="?order_by=-fecha_orden&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-down" title="Ordenar Desc."></a>
+
+                                        </th>
+                                        <th style="width: 8%; text-align: center;">Factura
+                                            <a href="?order_by=num_factura&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                            
+                                            <a href="?order_by=-num_factura&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-down" title="Ordenar Desc."></a>
+
+                                        </th>
+                                        <th style="width: 10%; text-align: center;">Fecha Factura
+                                            <a href="?order_by=fecha_factura&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                            
+                                            <a href="?order_by=-fecha_factura&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-down" title="Ordenar Desc."></a>
+
+                                        </th>
+                                        <th style="width: 10%; text-align: right;">Monto
+                                        </th>
+                                        <th style="width: 25%; text-align: center;">Proveedor
+                                            <a href="?order_by=ced_proveedor&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                            
+                                            <a href="?order_by=-ced_proveedor&{{ clean_query_string }}" 
+                                            class="icon fa-chevron-down" title="Ordenar Desc."></a>
+
+                                        </th>
+                                        <th style="width: 8%;text-align: center;">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entrada in entity %}
+                                    <tr style="text-align: center;">
+                                        <td><strong style="color: #555;">{{ entrada.num_orden }}</strong></td>
+                                        
+                                        <td style="text-align: center;">
+                                            {{ entrada.estado }} 
+                                            {% if entrada.estado == 'PROCESADA' %}
+                                                <span title="Procesada" style="color: #10a33c;">
+                                                    <i class="fa fa-check-circle"></i>
+                                                </span>
+
+                                            {% elif entrada.estado == 'ANULADA' %}
+                                                <span title="Anulada" style="color: #ffc107;">
+                                                    <i class="fa fa-times-circle"></i>
+                                                </span>
+                                            {% else %}
+                                                <span title="Pendiente" style="color: #3498db;">
+                                                    <i class="fa fa-cog fa-spin"></i>
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ entrada.fecha_orden|date:"d/m/Y" }}</td>
+                                        
+                                        <td>
+                                            {{ entrada.num_factura }}<br>
+                                        </td>
+                                        
+                                        <td>{{ entrada.fecha_factura|date:"d/m/Y" }}</td>
+                                        
+                                        <td style="text-align: right;">{{ entrada.monto_factura|localize }}</td>
+                                        
+                                        <td style="text-align: left;">
+                                            {% if entrada.ced_proveedor %}
+                                                <span style="font-weight: bold; color: #3b18d6;">
+                                                    {# Accedemos al campo 'ced_proveedor' del modelo ProveedoresBD #}
+                                                    {{ entrada.ced_proveedor.ced_proveedor }} 
+                                                </span>
+                                                <br>
+                                                <small style="color: #666;;">
+                                                    {# Accedemos al nombre del proveedor #}
+                                                    {{ entrada.ced_proveedor.nombres_apellidos }}
+                                                </small>
+                                            {% else %}
+                                                <span style="color: red;">Sin proveedor</span>
+                                            {% endif %}
+                                        </td>
+                                        <td style="text-align: center; vertical-align: middle;">
+                                            <div class="action-buttons-group" style="display: flex; align-items: center; justify-content: center;">
+                                                {% if entrada.pk %}
+                                                    <a href="{% url 'editar_entradas' id=entrada.pk %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                                                    title="Editar Orden" 
+                                                    class="icon fa fa-edit" 
+                                                    style="color: #0b2df0; font-size: 1.4em; margin-right: 12px; text-decoration: none;">
+                                                    </a>
+                                                    
+                                                    {% if entrada.estado == 'PROCESADA' %}
+                                                        <a href="#" 
+                                                            class="{% if user.is_superuser %}btn-desbloquear{% endif %}"
+                                                            data-id="{{ entrada.pk }}"
+                                                            title="{% if user.is_superuser %}Desbloquear{% else %}Bloqueado (Solo Superusuario){% endif %}"
+                                                            style="font-size: 1.4em; text-decoration: none; 
+                                                                {% if user.is_superuser %}
+                                                                    color: #28b958; 
+                                                                {% else %}
+                                                                    color: #a0a0a0; cursor: not-allowed; pointer-events: none;
+                                                                {% endif %}">
+                                                            <i class="fa fa-unlock"></i> 
+                                                        </a>
+                                                    {% elif entrada.estado == 'ANULADA' %}
+                                                        <a href="#" 
+                                                            class="btn-revertir-anulacion"
+                                                            data-id="{{ entrada.pk }}"
+                                                            title="Revertir anulación" 
+                                                            style="color: #3498db; font-size: 1.4em; text-decoration: none;">
+                                                                <i class="fa fa-undo"></i> 
+                                                        </a>
+                                                        {% elif entrada.estado == 'EN_PROCESO' %}
+                                                        <a href="#" 
+                                                            class="btn-ejecutar-anulacion" 
+                                                            data-id="{{ entrada.pk }}"
+                                                            title="Ejecutar anulación" 
+                                                            style="color: red; font-size: 1.4em; margin-right: 12px; text-decoration: none;">
+                                                            <i class="fa fa-times-circle"></i> 
+                                                        </a>
+                                                    {% endif %}
+
+                                                    {% if user.is_superuser %}
+                                                        <a href="#"
+                                                            onclick="openModal('{% if entrada.estado != 'PROCESADA' %}{% url 'borrar_entradas' id=entrada.pk %}{% endif %}?order_by={{ order_by }}', '{{ entrada.num_orden }}');"
+                                                            data-id="{{ entrada.pk }}"
+                                                            title="Eliminar"
+                                                            style="font-size: 1.4em; text-decoration: none; 
+                                                                {% if entrada.estado != 'PROCESADA' %}
+                                                                    color: #d80606; 
+                                                                {% else %}
+                                                                    color: #a0a0a0; cursor: not-allowed; pointer-events: none;
+                                                                {% endif %}">
+                                                            <i class="icon fa-trash"></i> 
+                                                        </a>
+                                                    {% endif %}
+                                                    {# Si es EN_PROCESO, no se muestra ningún tercer icono #}
+
+                                                {% else %}
+                                                    <span style="color: #999; font-size: 0.8em;">Sin ID</span>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="7" style="text-align: center;">No se encontraron registros de entrada.</td> 
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div>
+                        {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            
+            <h3>Confirmar eliminación</h3> 
+            
+            <p class="alerta-icono" style="color: #eee;">❌</p>        
+            <p class="alerta-mensaje">¿Estás seguro de que deseas eliminar la Entrada : <strong id="deleteEntityName"></strong>? Esta acción no se puede deshacer.</p>
+            
+            <div class="modal-buttons">
+                <a href="#" class="cancel-btn cancelar">Cancelar</a>
+                <a id="confirmDeleteLink" href="#" class="modal-btn confirmar">Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-container" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; padding: 10px 20px; pointer-events: none;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="
+                    pointer-events: auto;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+                    background-color: {% if 'error' in message.tags %}#f8d7da{% else %}#d1ecf1{% endif %};
+                    color: {% if 'error' in message.tags %}#721c24{% else %}#0c5460{% endif %};
+                    border: 1px solid {% if 'error' in message.tags %}#f5c6cb{% else %}#bee5eb{% endif %};
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    transition: opacity 0.5s ease;">
+                    
+                    <span>{{ message|safe }}</span>
+                    <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 1.5em; cursor: pointer;">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+<script>
+    const closeBtn = document.querySelector(".close-btn");
+    const cancelBtns = document.querySelectorAll(".cancel-btn");
+    const deleteModal = document.getElementById("deleteModal");
+    const confirmDeleteLink = document.getElementById("confirmDeleteLink");
+    const deleteEntityName = document.getElementById("deleteEntityName");
+
+        document.querySelectorAll('.btn-desbloquear').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita saltos de página
+                const entradaId = this.getAttribute('data-id');
+                
+                if (confirm('¿Deseas Desbloquear esta orden y cambiar su estado a EN_PROCESO?')) {
+                    fetch('{% url "desbloquear_entrada_ajax" %}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `id=${entradaId}`
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            location.reload();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Hubo un problema con la conexión: ' + error);
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-revertir-anulacion').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita saltos de página
+                const entradaId = this.getAttribute('data-id');
+                
+                if (confirm('¿Deseas reactivar esta orden y cambiar su estado a EN_PROCESO?')) {
+                    fetch('{% url "revertir_anulacion_entrada_ajax" %}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `id=${entradaId}`
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            location.reload();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Hubo un problema con la conexión: ' + error);
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.btn-ejecutar-anulacion').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // Evita saltos de página
+                const entradaId = this.getAttribute('data-id');
+                
+                if (confirm('¿Deseas ANULAR  esta orden y cambiar su estado a ANULADA?')) {
+                    fetch('{% url "ejecutar_anulacion_entrada_ajax" %}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `id=${entradaId}`
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            location.reload();
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        alert('Hubo un problema con la conexión: ' + error);
+                    });
+                }
+            });
+        });
+
+        // Función para abrir el modal
+        function openModal(deleteUrl, entityName) {
+            confirmDeleteLink.href = deleteUrl;
+            deleteEntityName.textContent = entityName;
+            // ⬇️ CAMBIA 'block' por 'flex' para activar el centrado de tu CSS
+            deleteModal.style.display = "flex"; 
+        }
+
+        // Cierra el modal al hacer clic en (x)
+        closeBtn.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+
+        // Cierra el modal al hacer clic en Cancelar
+        cancelBtns.forEach(btn => {
+            btn.onclick = function() {
+                deleteModal.style.display = "none";
+            }
+        });
+
+        // Cierra el modal si el usuario hace clic fuera de él
+        window.onclick = function(event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
+            }
+        }
+        // Lógica de Mensajes: 5 segundos O Tecla O Mouse
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('message-container');
+            const alerts = container.querySelectorAll('.alert');
+
+            if (alerts.length > 0) {
+                const desaparecer = () => {
+                    alerts.forEach(a => {
+                        a.style.opacity = "0";
+                        setTimeout(() => a.remove(), 500);
+                    });
+                };
+
+                // 1. Desaparecer por tiempo (5 segundos)
+                setTimeout(desaparecer, 5000);
+
+                // 2. Desaparecer al tocar una tecla
+                document.addEventListener('keydown', desaparecer, { once: true });
+
+                // 3. Desaparecer al mover o hacer clic con el mouse
+                document.addEventListener('mousedown', desaparecer, { once: true });
+            }
+        });
+
+    </script>
+
+{% endblock contenido %}

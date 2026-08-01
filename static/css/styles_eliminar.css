@@ -1,0 +1,110 @@
+
+#deleteModal {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none; /* ¡Oculto por defecto! */ 
+    justify-content: center; /* Se aplicará cuando se muestre como 'flex' */
+    align-items: center; /* Se aplicará cuando se muestre como 'flex' */
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1000;
+}
+
+/* --- ESTILOS GENERALES DEL MODAL (Ajusta si ya tienes otros) --- */
+.modal {
+    /* Asegura que el modal esté oculto por defecto y que oscurezca el fondo */
+    display: none; 
+    position: fixed; 
+    z-index: 1050; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0,0,0,0.4); /* Fondo semi-transparente */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Centrado vertical y horizontal */
+    padding: 0; /* Quitamos el padding para que la cabecera roja se vea limpia */
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px; /* Tamaño más apropiado para una alerta */
+    border-radius: 8px;
+    overflow: hidden; /* Importante para el color de la cabecera */
+}
+
+
+/* --- APLICACIÓN DE ESTILOS SOLICITADOS --- */
+
+/* 1. CABECERA ROJA con Letras Blancas */
+/* --- ESTILOS DE CABECERA (Fondo Rojo, Letras Blancas) --- */
+.modal-content h3 {
+    margin: 0; 
+    padding: 15px; 
+    background-color: hsl(0, 89%, 45%); /* Rojo de peligro */
+    color: white !important; 
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.3em;
+}
+
+/* --- ESTILOS DEL ICONO DE ADVERTENCIA (La X) --- */
+.alerta-icono {
+    /* Convierte el P en el círculo */
+    
+    /* CAMBIO CLAVE: Usamos 'flex' en lugar de 'inline-flex' para que ocupe su propia línea y se pueda centrar con 'margin: auto' */
+    display: flex !important; 
+    
+    justify-content: center !important; /* Centra la X horizontalmente */
+    align-items: center !important;     /* Centra la X verticalmente */
+    
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    
+    background-color: hsl(0, 89%, 45%); /* Rojo de peligro (usé un código más estándar para asegurar compatibilidad) */
+    color: white !important; /* ¡Ícono en BLANCO! */
+    
+    font-size: 2em !important; /* Tamaño de la X */
+    padding: 0 !important;
+    
+    /* CAMBIO CLAVE: Centra el círculo completo dentro del modal */
+    margin: 20px auto 10px auto !important; 
+}
+/* --- ESTILOS DEL MENSAJE Y BOTONES --- */
+.alerta-mensaje {
+    /* Usamos esta clase para centrar el mensaje y darle espacio */
+    color: black !important;
+    text-align: center;
+    padding: 0 20px 20px 20px; 
+    margin: 0;
+}
+
+.modal-buttons {
+    padding: 15px;
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+    border-top: 1px solid #eee;
+}
+
+/* Botones como en la respuesta anterior */
+.modal-btn.confirmar {
+    background-color: rgb(1, 1, 73); /* Rojo */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.cancel-btn.cancelar {
+    background-color: #6c757d; /* Gris */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+}

@@ -1,0 +1,379 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo %}
+    {{ titulo }}
+{% endblock titulo %}
+
+{% block contenido %}
+
+    <section id="three" style="width: 98%;
+            max-width: none !important;
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            padding-bottom: 10px !important;">
+        <div>
+            <h4 style="color:white; text-align:center; font-weight:bold; margin-top: 5px; margin-bottom: 5px;">LISTADO DE DIRECTORES</h4>
+        </div>
+
+        <header class="align-center" style="
+            display: flex; 
+            gap: 5px; 
+            justify-content: center; 
+            padding: 0px 0; margin-top: -8px; margin-bottom: 0px;">
+            
+            <a href="{% url 'crear_directores' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                class="button special icon fa-plus" 
+                title="Nuevo registro"
+                style="
+                    background-color: #0b2df0; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center;
+                    margin-top: 10px;">Agregar
+            </a>
+
+            <a href="{% url 'reporte_directores_pdf' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button special icon fa-file-pdf-o"
+                title="Exportar a PDF"
+                style="
+                    background-color: #d80606; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">PDF
+            </a> 
+            
+            <a href="{% url 'reporte_directores_excel' %}?order_by={{ order_by }}&{{ full_query_string }}"
+                class="button special icon fa-file-excel-o"
+                title="Exportar a Excel enriquecido"
+                style="
+                    background-color: #10a33c; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">Excel
+            </a> 
+            
+            <div class="align-right">
+                <a href="{% url 'dashboard' %}" 
+                    class="button special icon fa-arrow-left" 
+                    style="
+                        background-color: #0b2df0; 
+                        color: white;
+                        padding: 2px 4px;
+                        width: 70px;
+                        font-size: 1.0em; 
+                        border-radius: 6px; 
+                        transition: all 0.2s;
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        margin-top: 10px;">Salir</a>
+            </div>
+        </header>
+
+            <div class="inner" style="max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important;">
+                <div class="box" style="margin-top: 0px; margin-bottom: 0px; border-radius: 10px !important; width: 100% !important; padding: 0 !important;">
+                    <div class="content" style="padding: 0 !important; width: 100% !important; justify-content: center;">
+                    
+                        <!-- Banda azul reducida en altura -->
+                        <div class="align-center" style="margin-top: 0px; border: 0px solid white; padding: 2px 15px; border-radius: 5px; background-color: rgba(31, 146, 192, 0.247); width: 100% !important; box-sizing: border-box;">
+
+                            <form method="get" action="{% url 'listado_directores' %}" style="margin: 0 !important; padding: 0 !important; width: 100%;">
+                                
+                            <input type="hidden" name="order_by" value="{{ order_by }}">
+                            
+                            <div style="margin-bottom: 0px; display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 15px; padding-left: 15px;">
+                                <div style="min-width: 250px; max-width: 300px; margin-top: 5px; width: 400px;"> 
+                                    {{ filter_form.search_query.label_tag }}
+                                    {{ filter_form.search_query }}
+                                </div>
+                                <div style="min-width: 30px; max-width: 30px; margin-top: 5px; margin-left: auto;">
+                                    <div style="display: flex; flex-direction: column; gap: 5px;">                                        
+                                        <button type="submit" 
+                                                class="button special" 
+                                                title="Aplicar Filtros" 
+                                                style="
+                                                    background-color: #3e858e; 
+                                                    color: white; 
+                                                    width: 40px; 
+                                                    height: 40px; 
+                                                    padding: 0;
+                                                    border-radius: 50%; 
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;">
+                                            <i class="fa fa-filter"></i>
+                                        </button>
+                                        
+                                        <a href="{% url 'listado_directores' %}?order_by={{ order_by }}" 
+                                            class="button special" 
+                                            title="Limpiar Filtros" 
+                                            style="
+                                                background-color: #9c9c9c; 
+                                                color: white; 
+                                                width: 40px; 
+                                                height: 40px; 
+                                                padding: 0;
+                                                border-radius: 50%; 
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                                <i class="fa fa-refresh"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <div>
+            </div>
+
+            <div class="col-12" style="overflow-x: auto">
+                <div class="table-wrapper">
+                    <div style="margin-top: 0px; margin-left: 50px;">
+                        {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                    </div>
+                    <table class="alt" style="margin-top: 0px; margin-bottom: 10px;">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">Código
+                                    {# 🎯 CORRECCIÓN 3: Usamos clean_query_string para solo añadir el filtro #}
+                                    <a href="?order_by=cedula{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    <a href="?order_by=-cedula{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                <th style="width: 18%;">Nombres y Apellidos
+                                    {# 🎯 CORRECCIÓN 3: Usamos clean_query_string para solo añadir el filtro #}
+                                    <a href="?order_by=nombres_apellidos{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    <a href="?order_by=-nombres_apellidos{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                <th style="width: 8%;">usuario
+                                    {# 🎯 CORRECCIÓN 3: Usamos clean_query_string para solo añadir el filtro #}
+                                    <a href="?order_by=usuario{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    <a href="?order_by=-usuario{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                
+                                <th style="width: 25%;">DEPENDENCIA
+                                    {# 🎯 CORRECCIÓN 3: Usamos clean_query_string para solo añadir el filtro #}
+                                </th>
+                                    
+                                <th style="width: 25%;">Observaciones
+                                    {# 🎯 CORRECCIÓN 3: Usamos clean_query_string para solo añadir el filtro #}
+                                    <a href="?order_by=observaciones{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    <a href="?order_by=-observaciones{% if clean_query_string %}&{{ clean_query_string }}{% endif %}" class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                
+                                <th style="width: 4%;">Acción</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            
+                            {# ITERACIÓN SOBRE directores #}
+                            {% for director in entity %}
+                            <tr>
+                                <td style="text-align: center;">{{ director.cedula }}</td>
+                                <td>{{ director.nombres_apellidos }}</td>
+                                <td>{{ director.usuario }}</td>
+                                <td style="padding: 5px; vertical-align: middle;">
+                                    <div style="display: flex; flex-direction: column; gap: 3px;">
+                                        {% for oficina in director.oficinas.all %}
+                                            <div style="
+                                                background-color: #f0f0f0; 
+                                                border-left: 3px solid #6baf4c; 
+                                                padding: 2px 8px; 
+                                                font-size: 0.85em; 
+                                                color: #333;
+                                                line-height: 1.2;
+                                                border-radius: 3px;
+                                                display: flex;
+                                                justify-content: space-between;
+                                                align-items: center;">
+                                                
+                                                <span style="margin-right: 10px;">{{ oficina.dependencia.descripcion | upper }}</span>
+                                                
+                                                <div style="display: flex; align-items: center; flex-shrink: 0;">
+                                                    <span style="
+                                                        font-size: 0.8em; 
+                                                        font-weight: bold; 
+                                                        color: {% if oficina.cargo == 'T' %}#0b2df0{% else %}#e67e22{% endif %};
+                                                        border: 1px solid currentColor;
+                                                        padding: 0 4px;
+                                                        border-radius: 2px;
+                                                        margin-right: 5px;">
+                                                        {{ oficina.cargo }}
+                                                    </span>
+
+                                                    <span style="
+                                                        font-size: 0.8em; 
+                                                        font-weight: bold; 
+                                                        color: {% if oficina.activo %}#10a33c{% else %}#d80606{% endif %};
+                                                        border: 1px solid currentColor;
+                                                        padding: 0 4px;
+                                                        border-radius: 2px;">
+                                                        {{ oficina.activo|yesno:"Activo,Inactivo" }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% empty %}
+                                            <span style="color: #999; font-style: italic; font-size: 0.9em;">Sin dependencias</span>
+                                        {% endfor %}
+                                    </div>
+                                </td>
+                                <td>{{ director.observaciones }}</td>
+                                <td>
+                                    <div class="action-buttons-group">
+                                    <a href="{% url 'editar_directores' id=director.id %}?order_by={{ order_by }}&query_string={{ query_string }}" 
+                                        title="Editar" 
+                                        class="icon fa-edit" 
+                                        style="color: #0b2df0; font-size: 1.4em;"></a>
+                                    {# Se pasa el 'ced_director' como 'entityName' para el modal #}
+                                    <a href="javascript:void(0);" 
+                                        onclick="openModal('{% url 'borrar_directores' id=director.id %}?order_by={{ order_by }}', '{{ directors.ced_director }}');" 
+                                        title="Eliminar" 
+                                        class="icon fa-trash" 
+                                        style="color: #d80606; font-size: 1.4em;"></a> 
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div style="margin-left: 50px;">
+                        {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            
+            <h3>Confirmar eliminación</h3> 
+            
+            <p class="alerta-icono" style="color: #eee;">❌</p>        
+            <p class="alerta-mensaje">¿Estás seguro de que deseas eliminar el Director : <strong id="deleteEntityName"></strong>? Esta acción no se puede deshacer.</p>
+            
+            <div class="modal-buttons">
+                <a href="#" class="cancel-btn cancelar">Cancelar</a>
+                <a id="confirmDeleteLink" href="#" class="modal-btn confirmar">Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-container" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; padding: 10px 20px; pointer-events: none;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="
+                    pointer-events: auto;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+                    background-color: {% if 'error' in message.tags %}#f8d7da{% else %}#d1ecf1{% endif %};
+                    color: {% if 'error' in message.tags %}#721c24{% else %}#0c5460{% endif %};
+                    border: 1px solid {% if 'error' in message.tags %}#f5c6cb{% else %}#bee5eb{% endif %};
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    transition: opacity 0.5s ease;">
+                    
+                    <span>{{ message|safe }}</span>
+                    <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 1.5em; cursor: pointer;">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+        // Script original para el modal de eliminación (adaptado a los nuevos nombres)
+        const deleteModal = document.getElementById("deleteModal");
+        const closeBtn = document.querySelector(".close-btn");
+        const cancelBtns = document.querySelectorAll(".cancel-btn");
+        const confirmDeleteLink = document.getElementById("confirmDeleteLink");
+        const deleteEntityName = document.getElementById("deleteEntityName");
+
+        // Función para abrir el modal
+        function openModal(deleteUrl, entityName) {
+            confirmDeleteLink.href = deleteUrl;
+            deleteEntityName.textContent = entityName;
+            // ⬇️ CAMBIA 'block' por 'flex' para activar el centrado de tu CSS
+            deleteModal.style.display = "flex"; 
+        }
+
+        // Cierra el modal al hacer clic en (x)
+        closeBtn.onclick = function() {
+            deleteModal.style.display = "none";
+        }
+
+        // Cierra el modal al hacer clic en Cancelar
+        cancelBtns.forEach(btn => {
+            btn.onclick = function() {
+                deleteModal.style.display = "none";
+            }
+        });
+
+        // Cierra el modal si el usuario hace clic fuera de él
+        window.onclick = function(event) {
+            if (event.target == deleteModal) {
+                deleteModal.style.display = "none";
+            }
+        }
+        // Lógica de Mensajes: 5 segundos O Tecla O Mouse
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('message-container');
+            const alerts = container.querySelectorAll('.alert');
+
+            if (alerts.length > 0) {
+                const desaparecer = () => {
+                    alerts.forEach(a => {
+                        a.style.opacity = "0";
+                        setTimeout(() => a.remove(), 500);
+                    });
+                };
+
+                // 1. Desaparecer por tiempo (5 segundos)
+                setTimeout(desaparecer, 5000);
+
+                // 2. Desaparecer al tocar una tecla
+                document.addEventListener('keydown', desaparecer, { once: true });
+
+                // 3. Desaparecer al mover o hacer clic con el mouse
+                document.addEventListener('mousedown', desaparecer, { once: true });
+            }
+        });
+
+    </script>
+
+{% endblock contenido %}

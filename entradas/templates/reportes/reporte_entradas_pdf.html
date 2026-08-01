@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ titulo_reporte }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* CONFIGURACIÓN DE PÁGINA */
+            @page {
+                size: letter landscape;
+                margin: 1cm 1cm 2cm 1cm;
+            }
+            
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; left: 1.5cm; right: 1cm; height: 2.2cm;
+            }
+
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; left: 1.5cm; right: 1cm; height: 1cm; 
+            }
+
+            @frame content {
+                top: 3.0cm; left: 1.5cm; right: 1cm; bottom: 1.5cm;
+            }
+
+            body { 
+                font-family: Arial, sans-serif; 
+                font-size: 8.5pt; 
+                color: #333; 
+            }
+            
+            .header-separator {
+                border-bottom: 2px solid #1a4d94;
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 10px;
+            }
+
+            th {
+                background-color: #1a4d94;
+                color: white;
+                border: 1px solid #ccc;
+                padding: 6px;
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 8pt;
+            }
+
+            td {
+                border: 1px solid #ccc;
+                padding: 4px;
+                vertical-align: middle;
+            }
+
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .row-header {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+            .low-stock { color: red; font-weight: bold; }
+        </style>
+    </head>
+    
+    <body>
+        <div id="header-content">
+            <div style="display: flex; align-items: center;">
+                <div style="float: left; width: 20%;">
+                    {% if logo_path %}
+                        <img src="{{ logo_path }}" alt="Logo" style="max-width: 100%; height: auto;"/>
+                    {% endif %}
+                </div>
+                <div style="float: left; width: 80%; text-align: center;">
+                    <h2 style="margin: 0; padding-top: 10px;">{{ titulo_reporte | upper }}</h2>
+                </div>
+            </div>
+            <div style="clear: both;"></div> 
+            <div class="header-separator"></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">Orden/Fecha</th>
+                    <th width="10%">ESTADO</th>
+                    <th width="8%">Factura/Fecha</th>
+                    <th width="15%">Proveedor</th>
+                    <th width="7%">Mto.Fact.</th>
+                    <th width="10%">Codigo</th>
+                    <th width="30%">Producto</th>
+                    <th width="15%">Und.Medida</th>
+                    <th width="10%">Cant.Recibida</th>
+                </tr>
+            </thead>
+<tbody>
+    {% for entrada in entity %}
+        {% with detalles=entrada.detalles.all %}
+            {% if detalles %}
+                {% for detalle in detalles %}
+                <tr>
+                    {% if forloop.first %}
+                        <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
+                            <strong>{{ entrada.num_orden }}</strong><br>
+                            {{ entrada.fecha_orden|date:"d/m/Y" }}<br>
+                        </td>
+
+                        <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
+                            <span style="font-size: 7pt; color: #3b18d6;">{{ entrada.estado }}</span>
+                        </td>
+                        <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
+                            {{ entrada.num_factura|default:"---" }}<br>
+                            {{ entrada.fecha_factura|date:"d/m/Y" }}
+                        </td>
+                        <td rowspan="{{ detalles.count|default:1 }}">
+                            {{ entrada.ced_proveedor.nombres_apellidos|default:"No Registrado" }}<br>
+                            <small>{{ entrada.ced_proveedor.ced_proveedor|default:"" }}</small>
+                        </td>
+                        <td rowspan="{{ detalles.count|default:1 }}" class="text-right">
+                            {{ entrada.monto_factura|default:0 }}
+                        </td>
+                    {% endif %}
+                    <td>{{ detalle.cod_producto.cod_producto }}</td>
+                    <td>{{ detalle.cod_producto.descripcion|truncatechars:30 }}</td>
+                    <td>{{ detalle.cod_producto.cod_unidad }}</td>
+                    <td class="text-right">{{ detalle.cant_recibida|default:0 }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td class="text-center">
+                        <strong>{{ entrada.num_orden }}</strong><br>
+                        {{ entrada.fecha_orden|date:"d/m/Y" }}<br>
+                        <span style="font-size: 7pt; color: #3b18d6;">{{ entrada.estado }}</span>
+                    </td>
+                    <td class="text-center">
+                        {{ entrada.num_factura|default:"---" }}<br>
+                        {{ entrada.fecha_factura|date:"d/m/Y" }}
+                    </td>
+                    <td>
+                        {{ entrada.ced_proveedor.nombres_apellidos|default:"No Registrado" }}
+                    </td>
+                    <td class="text-right">{{ entrada.monto_factura|default:0 }}</td>
+                    <td colspan="7" class="text-center" style="color: gray;"><em>Orden sin productos registrados</em></td>
+                </tr>
+            {% endif %}
+        {% endwith %}
+    {% empty %}
+        <tr>
+            <td colspan="11" class="text-center">No se encontraron entradas con los filtros seleccionados.</td>
+        </tr>
+    {% endfor %}
+</tbody>
+        </table>
+        
+        <div id="footer-content">
+            <hr>
+            <table style="border: none;">
+                <tr>
+                    <td style="border: none; text-align: left;">Emitido el: {{ fecha_emision|date:"d/m/Y H:i" }}</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

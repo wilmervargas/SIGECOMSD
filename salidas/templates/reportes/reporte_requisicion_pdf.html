@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Requisicion - {{ salida.num_requi }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* CONFIGURACIÓN DE PÁGINA A VERTICAL */
+                
+            .info-table {
+                width: 100%;
+                border: none;
+                margin-bottom: 10px;
+            }
+
+            .info-table td {
+                border: none;
+                padding: 2px;
+                vertical-align: top;
+            }
+
+            /* ESTILO DE TABLA CON ENCABEZADO AZUL */
+            table.items-table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed; /* Obliga a respetar los anchos */
+            }
+
+            .text-center { text-align: center; }
+            /*.text-right { text-align: right; }*/
+            .bold { font-weight: bold; }
+            
+            .status-badge {
+                font-size: 9pt;
+                color: #1a4d94;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            @page {
+                size: letter portrait;
+                margin: 1cm; /* Margen físico de la hoja */
+                
+                @frame header {
+                    -pdf-frame-content: header-content;
+                    top: 1cm; left: 1cm; right: 1cm; height: 3cm;
+                }
+                @frame content {
+                    top: 2cm; left: 1cm; right: 1cm; bottom: 2.5cm;
+                }
+                @frame footer {
+                    -pdf-frame-content: footer-content;
+                    bottom: 1cm; left: 1cm; right: 1cm; height: 1.5cm; 
+                }
+            }
+
+            body { 
+                font-family: Arial, sans-serif; 
+                font-size: 8pt; 
+                color: #333; 
+            }
+
+            /* Forzar que las tablas no intenten expandirse más allá del frame */
+            table {
+                width: 100%;
+                table-layout: fixed;
+                border-collapse: collapse;
+            }
+
+            .items-table th {
+                background-color: #1a4d94; /* Azul Institucional */
+                color: white;
+                border: 2px solid #1a4d94;
+                padding: 1px 1px;
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 8pt;
+            }
+
+            .items-table td {
+                border: 2px solid #ccc;
+                padding: 1px 2px;
+                /* font-size: 8pt; */
+                word-wrap: break-word; /* Evita que texto largo rompa la tabla */
+            }
+
+            .header-separator {
+                border-bottom: 1px solid #1a4d94;
+                margin-bottom: 4px;
+            }
+            .text-center { text-align: center; }
+            .bold { font-weight: bold; }
+
+        </style>
+    </head>
+
+    <body>
+        <div id="header-content">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="width: 20%; border: none; vertical-align: middle;">
+                        {% if logo_path %}
+                            <img src="{{ logo_path }}" alt="Logo" style="height: 50px; width: auto;"/>
+                        {% endif %}
+                    </td>
+                    <td style="width: 60%; padding: 1px; padding-left: 20px; text-align: left; vertical-align: middle;">
+                        <h3 style="margin: 0; color: #1a4d94; font-size: 12pt;">DIRECCION DE</h3>
+                        <h3 style="margin: 0; color: #1a4d94; font-size: 12pt;">OPERATIVIDAD Y FUNCIONAMIENTO</h3>
+                        
+                    </td>
+                    <td style="width: 20%; border: none; text-align: right; vertical-align: middle;">
+                        <h2 style="margin: 0; color: #333; font-size: 14pt;">N° {{ salida.num_requi }}</h2>
+                        <p style="margin: 0; font-size: 8pt;">Fecha Requis.: {{ salida.fecha_requi|date:"d/m/Y" }}</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="header-separator"></div>
+        </div>
+
+        <table class="info-table">
+            <tr>
+                <td width="100%">
+                    <br>
+                    <p style="margin: 0; font-size: 11pt; text-align: center; font-weight: bold;">Requisición Interna de Materiales del CMSD<span class="status-badge"></span></p>
+                    <p style="margin: 0; font-size: 9pt;"><strong>ESTATUS:</strong> <span class="status-badge">{{ salida.get_estado_display|default:salida.estado }}</span></p>
+                    <p style="margin: 0;"><strong>Fecha de Aprobación:</strong> {{ salida.fecha_aprobacion|date:"d/m/Y"|default:"---" }}</p>
+                    <p class="bold" style="color: #1a4d94; margin-bottom: 2px; border-bottom: 1px solid #eee;">UNIDAD SOLICITANTE: <strong>{{ salida.cod_dependencia_soli.descripcion|upper }}</strong></p>
+                </td>
+            </tr>
+        </table>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th style="width: 5%;">Item</th>
+                    <th style="width: 10%;">CÓDIGO</th>
+                    <th style="width: 45%;">DESCRIPCIÓN DEL INSUMO</th> 
+                    <th style="width: 20%;">UNIDAD DE MEDIDA</th>
+                    <th style="width: 10%;">CANT. SOLICITADA</th>
+                    <th style="width: 10%;">CANT. ENTREGADA</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for detalle in salida.detalles.all %}
+                <tr>
+                    <td class="text-center">{{ forloop.counter }}</td>
+                    <td class="text-center">{{ detalle.cod_producto.cod_producto }}</td>
+                    <td>{{ detalle.cod_producto.descripcion }}</td>
+                    <td>{{ detalle.cod_producto.cod_unidad }}</td>
+                    <td class="text-center">{{ detalle.cant_solicitada|floatformat:2|default:0 }}</td>
+                    <td class="text-center">{{ detalle.cant_entregada|floatformat:2|default:0 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No hay insumos registrados en esta requisicion.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        <div style="margin-top: 50px;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="border: none; text-align: center; width: 45%;">
+                        <div style="border-top: 1px solid #333; padding-top: 5px; margin: 0 20px;">
+                            Unidad Solicitante:<br>
+                            <strong>{{ nombre_solicitante|upper }}</strong><br>
+                            <small>Firma y Sello</small>
+                        </div>
+                    </td>
+                    <td style="border: none; width: 10%;"></td>
+                    <td style="border: none; text-align: center; width: 45%;">
+                        <div style="border-top: 1px solid #333; padding-top: 5px; margin: 0 20px;">
+                            Autorizado Por:<br>
+                            <strong>{{ autorizado_por|upper }}</strong><br>
+                            <small>Firma y Sello</small>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+        <div style="margin-top: 50px;">
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="border: none; text-align: center; width: 45%;">
+                        <div style="border-top: 1px solid #333; padding-top: 5px; margin: 0 20px;">
+                            Entregado Por:<br>
+                            <strong>{{ entregado_por|upper }}</strong><br>
+                            <small>Firma y Sello</small>
+                        </div>
+                    </td>
+                    <td style="border: none; width: 10%;"></td>
+                    <td style="border: none; text-align: center; width: 45%;">
+                        <div style="border-top: 1px solid #333; padding-top: 5px; margin: 0 20px;">
+                            Recibido Conforme:<br>
+                            <small>Firma y Sello</small><br>
+                            <strong>Nombres y Apellidos Legibles: _________________________</strong><br>
+                            <strong>Cédula: ________________</strong><br>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div id="footer-content">
+            <div class="header-separator"></div>
+            <table style="width: 100%; border: none;">
+                <tr>
+                    <td style="border: none; text-align: left; font-size: 7pt;">
+                        Impreso: {{ fecha_emision|date:"d/m/Y H:i" }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

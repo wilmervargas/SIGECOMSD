@@ -1,0 +1,69 @@
+{% if paginator.num_pages > 1 %}
+
+<div class="pag-container">
+    <ul class="pag-list">
+        {# Botón Anterior #}
+        {% if entity.has_previous %}
+            <li class="pag-item d-none d-sm-block">
+                <a class="pag-link-btn" href="?page={{ entity.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">
+                   &laquo; Anterior
+                </a>
+            </li>
+        {% endif %}
+
+        {# Iteración sobre el rango de páginas #}
+        {% for page in paginator.page_range %}
+            
+            {# LÓGICA DE TRUNCAMIENTO EXISTENTE #}
+            
+            {% if forloop.last and page != entity.number and paginator.num_pages > 8 %} 
+                {% if entity.next_page_number != paginator.num_pages %}
+                <li class="pag-item">
+                    <a class="pag-link-btn" href="?page={{ entity.number | add:1 }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">...</a>
+                </li>
+                {% endif %}
+            <li class="pag-item">
+                <a class="pag-link-btn" href="?page={{ paginator.num_pages }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">{{ paginator.num_pages }}</a>
+            </li>
+            {% endif %}
+            
+            {% if page == entity.number and page > 8 %}
+            <li class="pag-item">
+                <a class="pag-link-btn" href="?page={{ page | add:-1 }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">...</a>
+            </li>    
+            {% endif %}
+            
+            {% if page < 8 or page == entity.number %}
+            <li class="pag-item {% if page == entity.number %}active{% endif %}">
+                <a class="pag-link-btn" href="?page={{ page }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">{{ page }}</a>
+            </li>
+            {% endif %}
+            
+        {% endfor %}
+
+        {# Botón Siguiente #}
+        {% if entity.has_next %}
+            <li class="pag-item d-none d-sm-block">
+                <a class="pag-link-btn" href="?page={{ entity.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">
+                   Siguiente &raquo;
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+
+    {# Paginación móvil #}
+    <!--div class="d-flex justify-content-center d-sm-none" style="gap: 8px; margin-top: 5px;">            
+        {% if entity.has_previous %}
+            <span class="pag-item"> 
+                <a class="pag-link-btn" href="?page={{ entity.previous_page_number }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">&laquo;</a>
+            </span>
+        {% endif %}
+        {% if entity.has_next %}
+            <span class="pag-item">
+                <a class="pag-link-btn" href="?page={{ entity.next_page_number }}{% if query_string %}&{{ query_string }}{% endif %}#pagtable">&raquo;</a>
+            </span>
+        {% endif %}
+    </div-->
+</div>
+
+{% endif %}

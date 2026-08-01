@@ -1,0 +1,8 @@
+cambiar a carpeta sigecomsd
+instalar venv
+instalar django 
+python.exe -m pip install --upgrade pip
+instalar xhtml2pdf
+instalar openpyxl
+instalar node
+npm install tailwindcss @tailwindcss/cli

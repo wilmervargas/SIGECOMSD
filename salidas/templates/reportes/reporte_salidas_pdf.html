@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ titulo_reporte }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* CONFIGURACIÓN DE PÁGINA */
+            @page {
+                size: letter landscape;
+                margin: 1cm 1cm 2cm 1cm;
+            }
+            
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; left: 1.5cm; right: 1cm; height: 2.2cm;
+            }
+
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; left: 1.5cm; right: 1cm; height: 1cm; 
+            }
+
+            @frame content {
+                top: 3.0cm; left: 1.5cm; right: 1cm; bottom: 1.5cm;
+            }
+
+            body { 
+                font-family: Arial, sans-serif; 
+                font-size: 8.5pt; 
+                color: #333; 
+            }
+            
+            .header-separator {
+                border-bottom: 2px solid #1a4d94;
+                margin-top: 5px;
+                margin-bottom: 10px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 10px;
+            }
+
+            th {
+                background-color: #1a4d94;
+                color: white;
+                border: 1px solid #ccc;
+                padding: 6px;
+                font-weight: bold;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 8pt;
+            }
+
+            td {
+                border: 1px solid #ccc;
+                padding: 4px;
+                vertical-align: middle;
+            }
+
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .row-header {
+                background-color: #f2f2f2;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="header-content">
+            <div style="display: flex; align-items: center;">
+                <div style="float: left; width: 20%;">
+                    {% if logo_path %}
+                        <img src="{{ logo_path }}" alt="Logo" style="max-width: 100%; height: auto;"/>
+                    {% endif %}
+                </div>
+                <div style="float: left; width: 80%; text-align: center;">
+                    <h2 style="margin: 0; padding-top: 10px;">{{ titulo_reporte | upper }}</h2>
+                </div>
+            </div>
+            <div style="clear: both;"></div> 
+            <div class="header-separator"></div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="10%">Requisición / Fecha</th>
+                    <th width="8%">Fecha Aprobación</th>
+                    <th width="20%">Dependencia Solicitante</th>
+                    <th width="8%">Estado</th>
+                    <th width="7%">Insumo</th>
+                    <th width="25%">Descripción</th>
+                    <th width="12%">Unidad Medida</th>
+                    <th width="8%">Cant. Solicitada</th>
+                    <th width="8%">Cant. Entregada</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for salida in entity %}
+                    {% with detalles=salida.detalles.all %}
+                        {% if detalles %}
+                            {% for detalle in detalles %}
+                            <tr>
+                                {% if forloop.first %}
+                                    <td rowspan="{{ detalles.count }}" class="text-center">
+                                        <strong>{{ salida.num_requi }}</strong><br>
+                                        {{ salida.fecha_requi|date:"d/m/Y" }}
+                                    </td>
+                                    <td rowspan="{{ detalles.count }}" class="text-center">
+                                        {{ salida.fecha_aprobacion|date:"d/m/Y"|default:"Pendiente" }}
+                                    </td>
+                                    <td rowspan="{{ detalles.count }}">
+                                        {{ salida.cod_dependencia_soli.descripcion|upper|default:"Sin Dependencia" }}
+                                    </td>
+                                    <td rowspan="{{ detalles.count }}" class="text-center">
+                                        <span style="font-size: 7pt; color: #3b18d6;">{{ salida.estado }}</span>
+                                    </td>
+                                {% endif %}
+                                <td>{{ detalle.cod_producto.cod_producto|default:" " }}</td>
+                                <td>{{ detalle.cod_producto.descripcion|truncatechars:50 }}</td>
+                                <td>{{ detalle.cod_producto.cod_unidad|default:" " }}</td>
+                                <td class="text-right">{{ detalle.cant_solicitada|default:0 }}</td>
+                                <td class="text-right">{{ detalle.cant_entregada|default:0 }}</td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td class="text-center">
+                                    <strong>{{ salida.num_requi }}</strong><br>
+                                    {{ salida.fecha_requi|date:"d/m/Y" }}
+                                </td>
+                                <td class="text-center">{{ salida.fecha_aprobacion|date:"d/m/Y"|default:"---" }}</td>
+                                <td>{{ salida.cod_dependencia_soli.descripcion|upper }}</td>
+                                <td class="text-center">{{ salida.estado }}</td>
+                                <td colspan="3" class="text-center" style="color: gray;"><em>Requisición sin productos</em></td>
+                            </tr>
+                        {% endif %}
+                    {% endwith %}
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center">No se encontraron requisiciones con los filtros seleccionados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div id="footer-content">
+            <hr>
+            <table style="border: none;">
+                <tr>
+                    <td style="border: none; text-align: left;">Emitido el: {{ fecha_emision|date:"d/m/Y H:i" }}</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+</html>

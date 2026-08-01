@@ -1,0 +1,408 @@
+
+{% block contenido %}
+<style>
+/* Estilo para campos deshabilitados */
+
+input:disabled, select:disabled, textarea:disabled {
+    background-color: #edf2f7 !important;
+    color: #4a5568 !important;
+    cursor: not-allowed !important;
+    border: 1px solid #cbd5e0 !important;
+}
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+        background-color: #fef3c7 !important;
+        border: none !important;
+        width: 100%;
+        height: 28px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    #three { padding-top: 5px !important; }
+    .box { border-radius: 6px; box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important; }
+    .content { padding: 15px !important; }
+
+    #detalle-salida-table { margin-bottom: 0 !important; }
+    
+    #detalle-salida-table thead th {
+        background: #1a4d94;
+        color: white;
+        padding: 5px 10px !important;
+        font-size: 0.9rem;
+        height: 30px !important;
+    }
+
+    #detalle-salida-table tbody td {
+        padding: 2px 5px !important; 
+        height: 32px !important;
+        vertical-align: middle !important;
+        border-bottom: 1px solid #eee;
+    }
+
+    #detalle-salida-table input, 
+    #detalle-salida-table select {
+        height: 28px !important;
+        padding: 0 8px !important;
+        font-size: 0.85rem !important;
+        border: 1px solid #cbd5e0 !important;
+        margin: 0 !important;
+    }
+
+    input[name*="cant_entregada"] {
+        border: 2px solid #0b2df0 !important; 
+        background-color: #fffde7 !important; 
+        font-weight: bold !important;
+        color: #000 !important;
+        text-align: right;
+    }
+
+    .delete-row-button {
+        background: transparent !important;
+        color: #e53e3e !important;
+        border: none !important;
+        box-shadow: none !important;
+        height: 28px !important;
+        width: 28px !important;
+        line-height: 28px !important;
+        padding: 0 !important;
+        font-size: 1.1rem !important;
+        cursor: pointer;
+    }
+
+    .order-closed-banner {
+        background-color: #fff5f5;
+        border: 2px solid #feb2b2;
+        color: #c53030;
+        padding: 10px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+</style>
+
+<section id="two">
+    <div class="inner" style="max-width: 1300px; margin: 0 auto;"> 
+        <div class="box">
+            <div class="content">
+                
+                {% if instancia.estado == 'PROCESADA' %}
+                <div class="order-closed-banner">
+                    <i class="fa fa-lock"></i> ESTA REQUISICION ESTÁ --- PROCESADA --- Y NO PUEDE SER MODIFICADA
+                </div>
+                {% elif instancia.estado == 'ANULADA' %}
+                <div class="order-closed-banner">
+                    <i class="fa fa-ban"></i> ESTA REQUISICION ESTÁ *** ANULADA *** Y NO PUEDE SER MODIFICADA
+                </div>
+                {% elif instancia.estado == 'POR_APROBAR' %}
+                <div class="order-closed-banner">
+                    <i class="fa fa-ban"></i> ESTA REQUISICION ESTÁ /// PENDIENTE POR APROBAR /// Y SOLO PUEDE SER MODIFICADA POR DIRECCION DE OPERATIVIDAD
+                </div>
+                {% endif %}
+
+                <form method="post" id="form-salida">
+                    {% csrf_token %}
+                    
+                    <div id="basurero-items" style="display:none;"></div>
+
+                    <div class="sub-section-frame" style="padding: 12px; margin-top: -15px; margin-bottom: 15px; background: #f8faff; border: 1px solid #dce4f5; border-radius: 8px;">
+                        <div class="form-main-container">
+                            <div class="row uniform" style="display: flex; align-items: flex-end; margin-top: -10px; margin-left: -10px; margin-right: -10px; margin-bottom: 15px;">
+                                <div style="width: 12%; padding: 0 10px; margin-bottom: 12px;">
+                                    <label style="font-size: 0.75rem; font-weight: bold; margin-bottom: 3px; display: block;">N° REQUIS.</label>
+                                    <input type="text" value="{{ formulario.instance.num_requi|default:'NUEVA' }}" readonly class="form-control bg-light">
+                                </div>
+
+                                <div style="width: 15%; padding: 0 10px; margin-bottom: 12px;">
+                                    <label style="font-size: 0.75rem; font-weight: bold; margin-bottom: 3px; display: block;">ESTATUS</label>
+                                    <input type="text" value="{{ formulario.estado.value|default:'' }}" readonly class="form-control" style="background: #ebf8ff !important; color: #2b6cb0 !important; text-align: center; font-weight: bold;">
+                                </div>
+
+                                <div style="width: 15%; padding: 0 10px; margin-bottom: 12px;">
+                                    <label style="font-size: 0.75rem; font-weight: bold; margin-bottom: 3px; display: block;">FECHA REQUIS.</label>
+                                    {{ formulario.fecha_requi }}
+                                </div>
+
+                                {% if instancia.estado == 'POR_APROBAR' or instancia.estado == 'PROCESADA'%}
+                                <div style="width: 15%; padding: 0 10px; margin-bottom: 12px;">
+                                    <label style="font-size: 0.75rem; font-weight: bold; margin-bottom: 3px; display: block;">FECHA APROBACION</label>
+                                    {{ formulario.fecha_aprobacion }}
+                                </div>
+                                {% endif %}
+
+                                <div style="width: 34%; padding: 0 10px; margin-bottom: 12px;">
+                                    <label style="font-size: 0.75rem; font-weight: bold; margin-bottom: 3px; display: block;">DEPENDENCIA</label>
+                                    {{ formulario.cod_dependencia_soli }}
+                                </div>
+                            </div>
+
+                            <div style="display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+                                {% if instancia.pk %}
+                                    <a href="{% url 'imprimir_requisicion' id=instancia.num_requi %}" target="_blank" class="button special icon fa-file-pdf-o" style="background-color: #dc2626; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;">Imprimir Requisicion</a>
+                                {% endif %}
+
+                                {% if not instancia.pk %}
+                                    <button type="submit" name="btn_guardar" class="button special icon fa-save" 
+                                    style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" 
+                                    class="button special icon fa-save">Guardar e Iniciar Carga</button>
+                                {% elif instancia.estado == 'EN_PROCESO' %}
+                                    <button type="submit" name="btn_guardar" class="button special icon fa-save" 
+                                    style="background-color: #430fd1; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" 
+                                    class="button special icon fa-save">Guardar Borrador</button>
+                                    <button type="submit" name="btn_poraprobar" class="button special icon fa-save" style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" class="button special icon fa-save">Guardar Carga y SOLICITAR APROBAR Requisicion</button>
+                                {% elif instancia.estado == 'POR_APROBAR' %}
+                                    {% if user.is_superuser or user.is_staff %}
+                                        <button type="submit" name="btn_guardar" class="button special icon fa-save" style="background-color: #430fd1; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" type="submit" class="button special icon fa-save">Guardar Borrador</button>
+                                        <button type="submit" name="btn_finalizar" class="button special icon fa-save" style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" type="submit" class="button special icon fa-save">Guardar Carga y APROBAR Requisicion (PASAR A PROCESADA)</button>
+                                    {% endif %}
+                                {% endif %}
+                                <a href="{% url 'listado_salidas' %}?{{ query_string }}" class="button special icon fa-close" 
+                                style="background-color: #dc2626; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;">
+                                {% if instancia.estado == 'EN_PROCESO' %}Cancelar{% else %}Regresar{% endif %}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if instancia.pk %}
+                    {{ formset.management_form }}
+                    <div class="table-wrapper">
+                        <table id="detalle-salida-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50%;">Descripción del Insumo</th>
+                                    <th style="width: 10%;">Und.Medida</th>
+                                    <th style="width: 10%; text-align: center;">Cant. Solicitada</th>
+                                    {% if instancia.estado == 'POR_APROBAR' or instancia.estado == 'PROCESADA'%}
+                                    <th style="width: 10%; text-align: center;">Cant. Entregada</th>
+                                    {% endif %}
+                                    <th style="width: 6%; text-align: center;">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for form in formset %}
+                                <tr class="formset-row">
+                                    <td>
+                                        {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+                                        {{ form.cod_producto }}
+                                    </td>
+                                    <td>{{ form.instance.cod_producto.cod_unidad.descripcion }}</td>
+                                    <td>{{ form.cant_solicitada }}</td>
+                                    {% if instancia.estado == 'POR_APROBAR' or instancia.estado == 'PROCESADA'%}
+                                    <td>{{ form.cant_entregada }}</td>
+                                    {% endif %}
+                                    <td style="text-align: center; vertical-align: middle;">
+                                        <div style="display:none;">{{ form.DELETE }}</div>
+                                        {% if instancia.estado != 'PROCESADA' and instancia.estado != 'POR_APROBAR' and instancia.estado != 'ANULADA' %}
+                                            <button type="button" class="delete-row-button btn-borrar-fila"title="Eliminar ítem">
+                                                <i class="fa fa-trash" style="color: #e53e3e; font-size: 1.3rem;"></i>
+                                            </button>
+                                        {% else %}
+                                            <i class="fa fa-lock" style="color: #cbd5e0;" title="Fila Bloqueada"></i>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. CONFIGURACIÓN DE ESTADO Y ELEMENTOS CORE
+    // Unificamos el estado: si está PROCESADA o ANULADA, el formulario es de "solo lectura"
+
+    const estadoActual = "{{ instancia.estado }}";
+    const estaBloqueada = estadoActual === "PROCESADA" || estadoActual === "ANULADA" || estadoActual === "POR_APROBAR";
+    
+    const totalFormsInput = document.querySelector('input[name$="-TOTAL_FORMS"]');
+    const formsetContainer = document.querySelector('#detalle-salida-table tbody');
+    const addButton = document.getElementById('add-form-row'); // Asegúrate que el ID coincida en tu HTML
+
+    // 2. FUNCIÓN DE BORRADO DE FILAS (Adaptada para Django)
+    function deleteForm(event) {
+        if (estaBloqueada) return;
+
+        const button = event.currentTarget;
+        const row = button.closest('.formset-row');
+        
+        // Buscamos si la fila tiene un ID (significa que ya está guardada en la BD)
+        const idInput = row.querySelector('input[name$="-id"]');
+        const deleteCheckbox = row.querySelector('input[type="checkbox"][name$="-DELETE"]');
+
+        if (idInput && idInput.value) {
+            // Si existe en BD, marcamos el checkbox oculto de Django y escondemos la fila
+            if (deleteCheckbox) {
+                deleteCheckbox.checked = true;
+                row.style.display = 'none';
+            }
+        } else {
+            // Si es una fila nueva (creada dinámicamente), la eliminamos del DOM
+            row.remove();
+            
+            // Actualizamos el contador de TOTAL_FORMS para que Django no se pierda
+            if (totalFormsInput) {
+                const currentRows = document.querySelectorAll('.formset-row').length;
+                totalFormsInput.value = currentRows;
+            }
+        }
+    }
+
+    // 3. FUNCIÓN DE VALIDACIÓN DE DUPLICADOS
+    function validarDuplicados(selectActual) {
+        const selects = document.querySelectorAll('select[name$="-cod_producto"]');
+        let esDuplicado = false;
+
+        selects.forEach(select => {
+            if (select !== selectActual && select.value === selectActual.value && select.value !== "") {
+                esDuplicado = true;
+            }
+        });
+
+        if (esDuplicado) {
+            alert("⚠️ Este insumo ya está en la lista.");
+            selectActual.value = "";
+            return true;
+        }
+        return false;
+    }
+
+    // 4. LÓGICA DE BLOQUEO (Solo lectura)
+    // Busca esta parte en tu script y cámbiala:
+    if (estaBloqueada) {
+        document.querySelectorAll('#form-salida select').forEach(el => {
+            // En lugar de bloquearlo totalmente, deshabilitamos las opciones NO seleccionadas
+            // Esto permite que el valor seleccionado viaje en el POST pero el usuario no pueda cambiarlo
+            Array.from(el.options).forEach(opt => {
+                if (!opt.selected) opt.disabled = true;
+            });
+            el.style.backgroundColor = "#edf2f7";
+        });
+    }
+
+    // NUEVA FUNCIÓN: Validar cantidad contra inventario
+    function validarStockContraEntregada(input) {
+        const row = input.closest('.formset-row');
+        const select = row.querySelector('select[name$="-cod_producto"]');
+        const option = select.options[select.selectedIndex];
+        
+        if (option && option.value !== "") {
+            // Extrae el número después de "Existencia: " usando Regex
+            const match = option.text.match(/Existencia:\s*([\d.]+)/);
+            if (match) {
+                const stockDisponible = parseFloat(match[1]);
+                const cantidadIngresada = parseFloat(input.value || 0);
+
+                if (cantidadIngresada > stockDisponible) {
+                    alert(`⚠️ ¡ATENCIÓN! \nInventario insuficiente para este producto.\n\nDisponible: ${stockDisponible}\nIntroducido: ${cantidadIngresada}\n\nLa cantidad se ajustará al máximo disponible.`);
+                    input.value = stockDisponible; // Ajusta automáticamente al máximo
+                    input.focus();
+                }
+            }
+        }
+    }
+
+    // 5. INICIALIZACIÓN DE FILAS (Existentes al cargar la página)
+    document.querySelectorAll('.formset-row').forEach(row => {
+        // Asignar evento al botón de eliminar
+        const delBtn = row.querySelector('.delete-row-button');
+        if (delBtn && !estaBloqueada) {
+            delBtn.addEventListener('click', deleteForm);
+        }
+
+        // Asignar validación de duplicados al select
+        const selectProducto = row.querySelector('select[name$="-cod_producto"]');
+        if (selectProducto && !estaBloqueada) {
+            selectProducto.addEventListener('change', function() {
+                validarDuplicados(this);
+            });
+        }
+
+        // Evento para validar stock al cambiar la cantidad entregada
+        const inputEntregada = row.querySelector('input[name$="-cant_entregada"]');
+        if (inputEntregada) {
+            inputEntregada.addEventListener('change', function() {
+                validarStockContraEntregada(this);
+            });
+        }
+
+    });
+
+    // 6. LÓGICA PARA AGREGAR NUEVAS FILAS (Botón "+" o similar)
+    if (addButton && !estaBloqueada) {
+        addButton.addEventListener('click', function() {
+            let currentCount = parseInt(totalFormsInput.value);
+            const template = document.getElementById('empty-form-template');
+            
+            if (!template) return;
+
+            // Clonamos el contenido del template
+            const newRow = template.content.cloneNode(true).querySelector('tr');
+            newRow.classList.add('formset-row');
+            
+            // Reemplazamos __prefix__ por el número de formulario actual
+            newRow.innerHTML = newRow.innerHTML.replace(/__prefix__/g, currentCount);
+            
+            // Asignamos los eventos a los nuevos elementos
+            newRow.querySelector('.delete-row-button').addEventListener('click', deleteForm);
+            
+            const newSelect = newRow.querySelector('select[name$="-cod_producto"]');
+            newSelect.addEventListener('change', function() {
+                validarDuplicados(this);
+            });
+
+            // Insertamos la fila en la tabla
+            formsetContainer.appendChild(newRow);
+            
+            // Incrementamos el contador de Django
+            totalFormsInput.value = currentCount + 1;
+        });
+    }
+
+    // --- FUNCIONES CORE ---
+    function actualizarCantidadDesdeSelect(selectElement) {
+        const row = selectElement.closest('.formset-row');
+        const inputCantidad = row.querySelector('input[name$="-cantidad"]');
+        const option = selectElement.options[selectElement.selectedIndex];
+        
+        if (option && option.value !== "") {
+            const match = option.text.match(/\(([^)]+)\)/);
+            if (match && inputCantidad) {
+                inputCantidad.value = match[1];
+            }
+        } else if (inputCantidad) {
+            inputCantidad.value = 0;
+        }
+        calcularNuevaExistencia(row);
+    }
+
+    function calcularNuevaExistencia(row) {
+        const existenciaActual = parseFloat(row.querySelector('input[name$="-cantidad"]')?.value || 0);
+        const cantEntregada = parseFloat(row.querySelector('input[name$="-cant_entregada"]')?.value || 0);
+        const inputNueva = row.querySelector('.nueva-existencia-input');
+        if (inputNueva) {
+            inputNueva.value = (existenciaActual + cantEntregada).toFixed(2);
+        }
+    }
+
+});
+</script>
+
+{% endblock contenido %}

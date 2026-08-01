@@ -1,0 +1,362 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo %}
+    {{ titulo }}
+{% endblock titulo %}
+
+{% block contenido %}
+
+    <section id="three" style="width: 98%;
+            max-width: none !important;
+            margin-top: 20px !important; /* <-- ¡AQUÍ! Esto baja la sección para que no toque el logo */
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;">
+        <div>
+            <h4 style="color:white; text-align:center; font-weight:bold; margin-bottom: 5px;">TABLA DE PROCEDIMIENTOS</h4>
+        </div>
+
+        <header class="align-center" style="
+            display: flex; 
+            gap: 5px; 
+            justify-content: center; 
+            padding: 0px 0; margin-top: -8px; margin-bottom: 0px;">
+            
+            <a href="{% url 'crear_procedimientos' %}?query_string={{ full_query_string }}" 
+            class="button special icon fa-plus" 
+            title="Nuevo registro"
+            style="
+                background-color: #0b2df0; 
+                color: white;
+                padding: 2px 4px;
+                width: 32px;
+                font-size: 1.0em; 
+                border-radius: 6px; 
+                transition: all 0.2s;
+                display: flex; 
+                justify-content: center; 
+                align-items: center;
+                margin-top: 10px; 
+            ">
+            </a>
+
+            <a href="{% url 'reporte_procedimientos_pdf' %}?{{ query_string }}&order_by={{ order_by }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button special icon fa-file-pdf-o"
+                title="Exportar a PDF"
+                style="
+                    background-color: #d80606; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 32px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px; 
+            "></a> 
+
+            <div class="align-right">
+                <a href="{% url 'panel' %}" 
+                    class="button special icon fa-arrow-left" 
+                    style="
+                        background-color: #0b2df0; 
+                        color: white;
+                        padding: 2px 4px;
+                        width: 70px;
+                        font-size: 1.0em; 
+                        border-radius: 6px; 
+                        transition: all 0.2s;
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        margin-top: 10px; 
+                    ">Salir</a>
+            </div>
+        </header>
+
+        <div class="inner"> 
+            <div class="box" style="margin-top: -40px; padding: 0px;" >
+                <div class="content">
+                
+                    <div class="align-center" style="margin-bottom: -20px; border: 0px solid white; padding: px; border-radius: 5px; background-color: rgba(31, 146, 192, 0.247);">
+                        <form method="get" action="{% url 'listado_procedimientos' %}">
+                            <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 5px;">
+                                <div style="flex: 1; max-width: 25%; margin-top: 5px; margin-right: auto; text-align: left;">
+                                    {{ filter_form.search_query.label_tag }}
+                                    {{ filter_form.search_query }}
+                                </div>                            
+                                <div style="min-width: 30px; max-width: 30px">
+                                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                                        
+                                        <button type="submit" 
+                                                class="button special" 
+                                                title="Aplicar Filtros" 
+                                                style="
+                                                    background-color: #3e858e; 
+                                                    color: white; 
+                                                    width: 40px; 
+                                                    height: 40px; 
+                                                    padding: 0;
+                                                    border-radius: 50%; 
+                                                    display: flex;
+                                                    align-items: center;
+                                                    justify-content: center;">
+                                            <i class="fa fa-filter"></i>
+                                        </button>
+                                        
+                                        <a href="{% url 'listado_procedimientos' %}" 
+                                            class="button special" 
+                                            title="Limpiar Filtros" 
+                                            style="
+                                                background-color: #9c9c9c; 
+                                                color: white; 
+                                                width: 40px; 
+                                                height: 40px; 
+                                                padding: 0;
+                                                border-radius: 50%; 
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                                <i class="fa fa-refresh"></i>
+                                        </a>                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                <div>
+
+                <tr>
+                    {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                </tr>
+            </div>
+
+            <div class="col-12" style="overflow-x: auto;">
+                <div class="table-wrapper">
+                    <table class="alt">
+                        <thead>
+                            <tr>
+                                <!--th style="width: 4%;">ID</th-->
+
+                                <th style="width: 10%; font-size: 0.8em; font-weight: bold; text-align: center;">Cód. Procedimiento
+                                    <a href="?{{ clean_query_string }}&order_by=cod_procedimiento" 
+                                    class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    
+                                    <a href="?{{ clean_query_string }}&order_by=-cod_procedimiento"
+                                    class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                <th style="width: 20%; font-size: 0.8em; font-weight: bold; text-align: left;">Título Procedimiento
+                                    <a href="?{{ clean_query_string }}&order_by=titulo" 
+                                    class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    
+                                    <a href="?{{ clean_query_string }}&order_by=-titulo"
+                                    class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                <th style="width: 6%; font-size: 0.8em; font-weight: bold; text-align: center;">Versión</th>
+                                <th style="width: 6%; font-size: 0.8em; font-weight: bold; text-align: center;">Fecha Elabo.</th>
+                                <th style="width: 6%; font-size: 0.8em; font-weight: bold; text-align: center;">Fecha Revis.</th>
+                                <th style="width: 6%; font-size: 0.8em; font-weight: bold; text-align: center;">Fecha Aprob.</th>
+                                <th style="width: 3%; font-size: 0.8em; font-weight: bold; text-align: center;">Dist. Digital</th>
+                                <th style="width: 3%; font-size: 0.8em; font-weight: bold; text-align: center;">Dist. Física</th>
+                                <th style="width: 20%; font-size: 0.8em; font-weight: bold; text-align: left;">Dependen. Responsable
+                                    <a href="?{{ clean_query_string }}&order_by=cod_dependencia" 
+                                    class="icon fa-chevron-up" title="Ordenar Asc."></a>
+                                    
+                                    <a href="?{{ clean_query_string }}&order_by=-cod_dependencia"
+                                    class="icon fa-chevron-down" title="Ordenar Desc."></a>
+                                </th>
+                                <th style="width: 20%; font-size: 0.8em; font-weight: bold; text-align: left;">Observaciones</th>
+                                <th style="width: 5%; text-align: center;">Ejemplar</th>
+                                <th style="width: 6%; text-align: center;">Acción</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for proce in entity %}
+                            <tr>
+                                <!--td><strong>{{ proce.id }}</strong></td-->
+                                
+                                <td style="text-align: center;">{{ proce.cod_procedimiento|default:"-" }}</td>
+                                
+                                <td style="text-align: left;">{{ proce.titulo|default:"Sin título" }}</td>
+                                
+                                <td style="text-align: center;">{{ proce.version|default:"-" }}</td>
+                                
+                                <td style="text-align: center;">{{ proce.fecha_elaboracion|date:"d/m/Y"|default:"-" }}</td>
+                                <td style="text-align: center;">{{ proce.fecha_revision|date:"d/m/Y"|default:"-" }}</td>
+                                <td style="text-align: center;">{{ proce.fecha_aprobacion|date:"d/m/Y"|default:"-" }}</td>
+                                
+                                <td style="text-align: center;">
+                                    {% if proce.distribucion_digital %}
+                                        <span class="text-success" title="Sí">✔</span>
+                                    {% else %}
+                                        <span class="text-muted" title="No">✘</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td style="text-align: center;">
+                                    {% if proce.distribucion_fisica %}
+                                        <span class="text-success" title="Sí">✔</span>
+                                    {% else %}
+                                        <span class="text-muted" title="No">✘</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td style="text-align: left;">{{ proce.cod_dependencia.descripcion|default:"No asignada" }}</td>
+                                
+                                <td style="text-align: left;"><small>{{ proce.observaciones|default:"" }}</small></td>
+
+                                <td style="text-align: center; vertical-align: middle;">
+                                    {% if proce.archivo_pdf %}
+                                        <a href="{{ proce.archivo_pdf.url }}" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer"
+                                        class="button special icon fa-file-pdf-o" 
+                                        title="Ver Documento PDF"
+                                        style="background-color: #e11d48; color: white; padding: 0px 8px; width: 35px; height: 30px; display: inline-flex; justify-content: center; align-items: center; border-radius: 4px;">
+                                        </a>
+                                    {% else %}
+                                        <span style="color: #94a3b8; font-size: 0.85em;">✘</span>
+                                    {% endif %}
+                                </td>
+
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <div class="action-buttons-group">
+                                        <a href="{% url 'editar_procedimientos' id=proce.id %}?{{ full_query_string }}" 
+                                            title="Editar" 
+                                            class="icon fa-edit" 
+                                            style="color: #0b2df0; font-size: 1.4em;"></a>
+                                        <a href="javascript:void(0);" 
+                                            onclick="openModal('{% url 'borrar_procedimientos' id=proce.id %}?{{ full_query_string }}', 'Cod. Procedimiento {{ proce.cod_procedimiento }}');" 
+                                            title="Eliminar" 
+                                            class="icon fa-trash" 
+                                            style="color: #d80606; font-size: 1.4em;"></a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No hay Procedimientos que coincidan con los criterios de búsqueda.</td> 
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div>
+                <tr>
+                    {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                </tr>
+            </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Confirmar eliminación</h3> 
+            <p class="alerta-icono" style="color: #eee;">❌</p>        
+            <p class="alerta-mensaje">¿Estás seguro de que deseas eliminar el: <strong id="deleteEntityName"></strong>? Toda la data histórica vinculada se perderá de forma irreversible.</p>
+            <div class="modal-buttons">
+                <a href="#" class="cancel-btn cancelar">Cancelar</a>
+                <a id="confirmDeleteLink" href="#" class="modal-btn confirmar">Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="message-container" style="position: fixed; bottom: 0; left: 0; width: 100%; z-index: 9999; padding: 10px 20px; pointer-events: none;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}" style="
+                    pointer-events: auto;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+                    background-color: {% if 'error' in message.tags %}#f8d7da{% else %}#d1ecf1{% endif %};
+                    color: {% if 'error' in message.tags %}#721c24{% else %}#0c5460{% endif %};
+                    border: 1px solid {% if 'error' in message.tags %}#f5c6cb{% else %}#bee5eb{% endif %};
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    transition: opacity 0.5s ease;">
+                    
+                    <span>{{ message|safe }}</span>
+                    <button type="button" onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 1.5em; cursor: pointer;">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+<script>
+    const deleteModal = document.getElementById("deleteModal");
+    const confirmDeleteLink = document.getElementById("confirmDeleteLink");
+    const deleteEntityName = document.getElementById("deleteEntityName");
+
+    // --- PERSISTENCIA DE SCROLL ---
+    window.addEventListener('load', function() {
+        const scrollPos = localStorage.getItem('scrollPosition');
+        if (scrollPos) {
+            setTimeout(() => {
+                window.scrollTo({ top: parseInt(scrollPos), behavior: 'auto' });
+                localStorage.removeItem('scrollPosition');
+            }, 50);
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('action-link') || e.target.closest('.action-link')) {
+            localStorage.setItem('scrollPosition', window.scrollY);
+        }
+    });
+
+    document.querySelectorAll('.pagination a, .btn-filter').forEach(link => {
+        link.addEventListener('click', () => localStorage.removeItem('scrollPosition'));
+    });
+
+    // --- LÓGICA MODAL ---
+    function openModal(deleteUrl, entityName) {
+        localStorage.setItem('scrollPosition', window.scrollY);
+        confirmDeleteLink.href = deleteUrl;
+        deleteEntityName.textContent = entityName;
+        deleteModal.style.display = "flex"; 
+    }
+
+    document.querySelector(".close-btn").onclick = () => deleteModal.style.display = "none";
+    document.querySelectorAll(".cancel-btn").forEach(btn => btn.onclick = () => deleteModal.style.display = "none");
+    
+    window.onclick = (event) => {
+        if (event.target == deleteModal) deleteModal.style.display = "none";
+    }
+
+    // Lógica de desvanecimiento automático / interacción externa
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('message-container');
+        const alerts = container.querySelectorAll('.alert');
+
+        if (alerts.length > 0) {
+            const desaparecer = () => {
+                alerts.forEach(a => {
+                    a.style.opacity = "0";
+                    setTimeout(() => a.remove(), 500);
+                });
+            };
+            setTimeout(desaparecer, 5000);
+            document.addEventListener('keydown', desaparecer, { once: true });
+            document.addEventListener('mousedown', desaparecer, { once: true });
+        }
+    });
+</script>
+
+{% endblock contenido %}

@@ -1,0 +1,287 @@
+
+/* ============================================
+   Landing Page - Solo Flexbox
+   DemostraciÃ³n de Flexbox + responsive bÃ¡sico
+   ============================================ */
+
+/* ---------- RESET ---------- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  background: #0f172a;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ---------- TYPOGRAPHY ---------- */
+h1 { font-size: 2.5rem; font-weight: 900; color: #fff; line-height: 1.15; }
+h1 span { background: linear-gradient(135deg, #7c3aed, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+h2 { font-size: 1.8rem; font-weight: 800; color: #fff; text-align: center; margin-bottom: 2.5rem; }
+p { font-size: 1rem; color: #94a3b8; }
+
+/* ---------- BOTONES ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.9rem 2.2rem;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn:hover { transform: scale(1.05); box-shadow: 0 8px 30px rgba(124, 58, 237, 0.35); }
+.btn-large { padding: 1.1rem 3rem; font-size: 1.1rem; }
+
+/* ---------- HEADER (FLEXBOX) ---------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: rgba(15, 23, 42, 0.9);
+  border-bottom: 1px solid #1e293b;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+    display: flex;
+    flex-direction: row;   /* Mantiene la imagen a la izquierda y el texto a la derecha */
+    align-items: center;   /* Centra verticalmente la imagen con el bloque de texto */
+    gap: 12px;             /* Un poco más de espacio entre la imagen y las letras */
+}
+
+.logo img { 
+    width: 80px; 
+    border-radius: 10px;
+}
+
+.logo-texto {
+    display: flex;
+    flex-direction: column; /* ¡Aquí está el truco! Apila SISCONINV arriba y el span abajo */
+    justify-content: center;
+    color: #fff;
+    font-size: 1.3rem;      /* Tamaño para SISCONINV */
+    font-weight: 700;
+    line-height: 1.2;       /* Evita que las dos líneas queden muy separadas */
+}
+
+.logo-texto span {
+    font-size: 1.2rem;     /* Más pequeño para que funcione como subtítulo/eslogan */
+    color: #8b5cf6;         /* El color morado de tu diseño */
+    font-weight: 500;
+    white-space: nowrap;    /* Evita que el eslogan se rompa si la pantalla es chica */
+}
+
+nav { display: flex; gap: 0.5rem; }
+nav a {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #94a3b8;
+  border-radius: 8px;
+  transition: color 0.3s, background 0.3s;
+
+  display: inline-flex;  /* Alinea el enlace en línea con los demás */
+  align-items: center;   /* Centra verticalmente el icono y el texto */
+  gap: 8px;              /* Deja un espacio agradable entre el icono y el texto */
+  text-decoration: none; /* Quita el subrayado si lo deseas */
+}
+nav a:hover { color: #fff; background: #1e293b; }
+
+    .menu-principal {
+      display: flex;
+      list-style: none;
+      gap: 4px;
+    }
+    .menu-principal > li { position: relative; }
+    .menu-principal > li > a {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .menu-principal > li > a:hover { background: #334155; color: #fff; }
+
+    .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 180px;
+      list-style: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
+    .menu-principal > li:hover .submenu { display: block; }
+    .submenu li a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #94a3b8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .submenu li a:hover { background: #334155; color: #fff; }
+    
+/* ---------- HERO (FLEXBOX CENTER) ---------- */
+#hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 2rem;
+  text-align: center;
+}
+.hero-content { max-width: 650px; }
+.hero-content p { margin: 1.5rem 0 2.5rem; font-size: 1.15rem; }
+
+/* ---------- FEATURES (FLEXBOX + WRAP) ---------- */
+#features { padding: 4rem 2rem; background: #0a0f1a; }
+
+.features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  flex: 1 1 300px;
+  background: #13171f;
+  border: 1px solid #1e293b;
+  border-radius: 1.25rem;
+  padding: 2rem;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.feature-card:hover { transform: translateY(-5px); border-color: #7c3aed; }
+.feature-card .icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.feature-card h3 { font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 0.5rem; }
+.feature-card p { font-size: 0.9rem; color: #64748b; }
+
+/* ---------- TESTIMONIALS (FLEXBOX) ---------- */
+#testimonials { padding: 4rem 2rem; }
+
+.testimonials-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.testimonial-card {
+  flex: 1 1 400px;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(124,58,237,0.05), rgba(59,130,246,0.05));
+  border: 1px solid #1e293b;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  transition: border-color 0.3s;
+}
+.testimonial-card:hover { border-color: #3b82f6; }
+
+.avatar {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c3aed, #3b82f6);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem; color: #fff;
+  flex-shrink: 0;
+}
+.quote { font-style: italic; font-size: 0.9rem; color: #cbd5e1; margin-bottom: 0.5rem; }
+.name { font-weight: 600; color: #fff; font-size: 0.85rem; }
+.role { font-size: 0.8rem; color: #64748b; }
+
+/* ---------- CTA ---------- */
+#contact { padding: 4rem 2rem; text-align: center; }
+#contact p { max-width: 500px; margin: 0 auto 2rem; font-size: 1.05rem; }
+
+/* ---------- FOOTER (FLEXBOX) ---------- */
+footer { background: #0a0f1a; border-top: 1px solid #1e293b; padding: 3rem 2rem 1.5rem; }
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto 2rem;
+}
+.footer-brand { flex: 1; min-width: 240px; }
+.footer-logo { font-size: 1.3rem; font-weight: 900; color: #fff; margin-bottom: 0.75rem; }
+.footer-logo span { color: #7c3aed; }
+.footer-desc { font-size: 0.85rem; color: #64748b; max-width: 280px; }
+
+.footer-links, .footer-social { display: flex; flex-direction: column; gap: 0.5rem; min-width: 120px; }
+.footer-content h4 { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #94a3b8; margin-bottom: 0.25rem; }
+.footer-content a { font-size: 0.85rem; color: #64748b; transition: color 0.3s; }
+.footer-content a:hover { color: #7c3aed; }
+
+.footer-bottom { text-align: center; padding-top: 1.5rem; border-top: 1px solid #1e293b; max-width: 1100px; margin: 0 auto; }
+.footer-bottom p { font-size: 0.8rem; color: #475569; }
+
+/* ---------- RESPONSIVE (1 MEDIA QUERY COMPLETAMENTE UNIFICADA) ---------- */
+@media (max-width: 600px) {
+  header { flex-direction: column; gap: 1rem; text-align: center; }
+  
+  /* Esto maneja el ritmo vertical de los enlaces directos (Menú del Home) */
+  nav { flex-direction: column; gap: 0.3rem; width: 100%; }
+  
+  h1 { font-size: 1.8rem; }
+  .testimonial-card { flex-direction: column; align-items: center; text-align: center; }
+
+  /* Esto obliga al Menú del Panel (ul) a clonar el mismo ritmo vertical del Home */
+  .menu-principal {
+    flex-direction: column;
+    gap: 0.3rem; /* Mismo espacio vertical que usa el menú del home */
+    width: 100%;
+  }
+
+  .menu-principal > li {
+    width: 100%;
+  }
+
+  .menu-principal > li > a {
+    justify-content: center; /* Centra los iconos de Phosphor en pantallas táctiles */
+    width: 100%;
+  }
+
+  /* El submenú flotante del panel se adapta para desplegarse prolijamente en móvil */
+  .submenu {
+    position: static;    /* Cambia de flotante a estático para empujar las opciones hacia abajo sin pisarlas */
+    width: 100%;
+    box-shadow: none;    /* Elimina la sombra 3D flotante */
+    background: #13171f; /* Tono de fondo integrado para diferenciarlo */
+    margin-top: 4px;
+    padding: 6px;
+  }
+
+  .submenu li a {
+    justify-content: center; /* Centra las subcategorías en el móvil */
+  }
+}

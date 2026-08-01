@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ titulo_reporte }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* ========================================================================= */
+            /* 1. CONFIGURACIÓN DE PÁGINA Y MARCOS ESTÁTICOS (CRÍTICO PARA REPETICIÓN)   */
+            /* ========================================================================= */
+            @page {
+                size: letter portrait;
+                /* size: letter landscape; */
+                margin: 1cm 1cm 2cm 1cm; /* Top Right Bottom Left margins */
+                }
+                /* Marco de la Cabecera (Se repite): Deja espacio arriba */
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; 
+                left: 1.5cm;
+                right: 1cm;
+                height: 2.2cm; /* Espacio para el logo, título y separador */
+            }
+
+            /* Marco del Pie de Página (Se repite): Deja espacio abajo */
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; 
+                left: 1.5cm;
+                right: 1cm;
+                height: 1cm; 
+            }
+            /* Marco del Contenido Principal: El área donde fluye la tabla */
+            @frame content {
+                top: 3.0cm;   /* Debe liberar el espacio del encabezado (2.2cm + margen) */
+                left: 1.5cm;
+                right: 1cm;
+                bottom: 1.5cm; /* Debe liberar el espacio del pie de página (1cm + margen) */
+            }
+            
+            /* ========================================================================= */
+            /* 2. ESTILOS BASE Y ENCABEZADO (USANDO SOLO FLOTANTES)                      */
+            /* ========================================================================= */
+            body { font-family: Arial, sans-serif; font-size: 10pt; }
+            
+            #header-content { padding: 0; margin: 0; }
+            
+            h1 { margin: 0; padding: 0; font-size: 14pt; color: #1a4f8d; text-align: center; font-weight: 700; }
+            .header-separator { border-bottom: 2px solid #1a4f8d; margin-top: 5px; margin-bottom: 3px; }
+            
+            /* Uso de flotantes para alinear logo y título */
+            #header-content img {
+                max-height: 1.8cm; 
+                width: auto;
+            }
+            
+            /* Utilidad para limpiar flotantes */
+            .clearfix::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+
+            /* ========================================================================= */
+            /* 3. ESTILOS DE TABLA                                                       */
+            /* ========================================================================= */
+            table { 
+                width: 100%; 
+                border-collapse: collapse; 
+                margin-top: 0;
+            }
+            
+            thead { 
+                display: table-header-group; 
+            } 
+            
+            thead th { background-color: #1a4f8d; color: white; font-weight: bold; text-transform: uppercase; border-color: #1a4f8d; letter-spacing: 0.5px; padding: 5px 8px; border: 1px solid #1a4f8d;}
+            th, td { border: 1px solid #ddd; padding: 5px 8px; text-align: center; }
+            tbody tr:nth-child(even) { background-color: #f7f7f7; }
+
+            /* ========================================================================= */
+            /* 4. ESTILOS DE PIE DE PÁGINA (Sin text-align: center)                       */
+            /* ========================================================================= */
+            #footer-content { 
+                font-size: 8pt; 
+                color: #666; 
+                border-top: 1px solid #ccc; 
+                padding-top: 5px;
+                width: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="header-content" class="clearfix">
+            <div class="header" style="display: flex; align-items: center;">
+                <div class="header-logo" style="width: 15%;">
+                    <img src="{{ logo_path }}" alt="Logo de la Empresa" style="max-width: 100%; height: auto;"/>
+                </div>
+                
+                <div class="header-title" style="flex-grow: 1; text-align: center;">
+                    <h2>{{ titulo_reporte | upper }}</h2>
+                </div>
+            </div>
+            <div style="clear: both;"></div> 
+            <div class="header-separator"></div>
+        </div> 
+        
+        <table>
+            <thead>
+                <tr>
+                    <th width="4%">Nro.</th>
+                    <th width="18%">Código</th>
+                    <th width="40%">Descripción de Categoría</th>
+                    <th width="50%">Observaciones</th>
+                </tr>
+            </thead>
+        
+            <tbody>
+                {% for categ in categorias %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td style="text-align: left;">{{ categ.cod_categoria | default:'-' }}</td>
+                        <td style="text-align: left;">{{ categ.descripcion | upper | default:'-' }}</td>
+                        <td style="text-align: left;">{{ categ.observaciones | upper | default:'-' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+        <div>
+            <span style="float: left;">Emitido el: {{ fecha_emision|date:"d/m/Y H:i" }}</span>
+        </div>
+
+    </body>
+
+</html>

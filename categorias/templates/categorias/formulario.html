@@ -1,0 +1,39 @@
+<!-- Contenedor con marco redondeado, fondo blanco y sombra -->
+<div class="w-full bg-white rounded-3xl border-2 border-slate-300 shadow-xl p-6 sm:p-8">
+
+    <form action="" method="post" class="w-full space-y-6">
+        {% csrf_token %}
+
+        <!-- Recorrido de los campos de Django -->
+        <div class="space-y-5">
+            {% for field in formulario %}
+                <div class="flex flex-col">
+                    <label for="{{ field.id_for_label }}" class="mb-2 text-sm font-bold text-slate-700 tracking-wide">
+                        {{ field.label }}
+                    </label>
+
+                    <!-- Fondo gris tenue, relieve interno y foco resaltado -->
+                    <div class="[&>input]:w-full [&>input]:bg-slate-100 [&>input]:border-2 [&>input]:border-slate-300 [&>input]:rounded-xl [&>input]:px-4 [&>input]:py-2.5 [&>input]:text-slate-900 [&>input]:shadow-inner [&>input]:focus:bg-white [&>input]:focus:border-violet-600 [&>input]:focus:outline-none [&>textarea]:w-full [&>textarea]:bg-slate-100 [&>textarea]:border-2 [&>textarea]:border-slate-300 [&>textarea]:rounded-xl [&>textarea]:px-4 [&>textarea]:py-2.5 [&>textarea]:shadow-inner [&>select]:w-full [&>select]:bg-slate-100 [&>select]:border-2 [&>select]:border-slate-300 [&>select]:rounded-xl [&>select]:px-4 [&>select]:py-2.5 transition-all">
+                        {{ field }}
+                    </div>
+                </div>
+                
+                {% if field.errors %}
+                    <p class="text-red-600 text-xs mt-1 font-semibold">{{ field.errors.0 }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <!-- Botones de acción: gap-4 (espacio entre sí), pl-4 (izquierdo), pb-6 y mb-2 (inferior) -->
+        <div style="display: flex; gap: 10px; justify-content: center; padding-top: 10px; padding-bottom: 10px;">
+            <button style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" type="submit" class="button special icon fa-save">
+                Grabar
+            </button>
+            <a href="{% url 'listado_categoria' %}?{{ query_string }}" style="background-color: #dc2626; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;" class="button alt icon fa-close">
+                Cancelar
+            </a>
+        </div>
+
+</form>
+
+</div>

@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block titulo %}
+    Sistema de Control de Inventario y Suministros (SISCOINS)
+{% endblock titulo %}
+
+{% block contenido %}
+<style>
+/* 1. LIBERAR EL CUERPO PARA QUE TENGA SCROLL NATURAL */
+    html, body {
+        height: auto !important;
+        min-height: 100vh; /* Asegura que al menos ocupe la pantalla, pero no la limite */
+        overflow-y: visible !important; 
+        overflow-x: hidden;
+        background-color: #ffffff !important;
+    }
+
+    /* 2. ELIMINAR EL CORTE DEL CONTENEDOR HOME */
+    .home {
+        height: auto !important; 
+        min-height: auto !important; /* Quitamos el 100vh que suele bloquear la vista */
+        overflow: visible !important; 
+        position: relative;
+        display: block; /* Asegura que se comporte como bloque */
+    }
+
+    /* 3. DESBLOQUEAR FLEXSLIDER PARA QUE NO "ESCONDA" EL RESTO */
+    .flexslider, 
+    .flexslider .slides, 
+    .flex-viewport {
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* 4. IMÁGENES A TAMAÑO REAL */
+    .flexslider .slides img {
+        width: 100% !important;
+        height: auto !important; /* La imagen dicta el largo */
+        display: block;
+        position: relative;
+        object-fit: contain;
+    }
+
+    /* 5. TEXTO SOBRE LA IMAGEN */
+    .slider-text-wrapper {
+        position: absolute;
+        top: 20%; /* Lo mantiene arriba al inicio */
+        left: 0;
+        width: 100%;
+        z-index: 2;
+        transform: none !important;
+    }
+
+    /* 6. ESTILOS DE NAVEGACIÓN (LETRAS BLANCAS/BOLD) */
+    .menu-row {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+    }
+
+    .menu-wrapper {
+        display: flex;
+        gap: 20px;
+    }
+
+    .menu-wrapper a,
+    .menu-wrapper .dropbtn {
+        color: white !important; 
+        font-weight: bold !important;
+        text-decoration: none;
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        font-size: inherit;
+    }
+
+    /* 7. LIMPIEZA DE FONDOS */
+    .section, #nosotros, #portafolio, #why-choose, .work-main, #pageloader {
+        background-color: #ffffff !important;
+    }
+
+    .slider-overlay {
+        display: none !important; /* Quita el filtro oscuro */
+    }
+
+    /* Dropdown simple */
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #ffffff;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+        z-index: 10;
+    }
+
+    .dropdown-content a {
+        color: black !important;
+        padding: 12px 16px;
+        display: block;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+</style>
+
+    <!--Start Page loader -->
+    <div id="pageloader">   
+            <div class="loader">
+            <img src="{% static 'images/progress.gif' %}" alt='loader' />
+            </div>
+    </div>
+    <!--End Page loader -->
+            
+    <!--Start Navigation-->
+<header id="header" style="background-color: #0056b3; padding: 10px 0;">
+    {% include 'logo.html' %}
+    <div class="container">
+        <div class="row" style="text-align: center; margin-bottom: 5px;">
+            <div class="col-md-12">
+                <h2 style="color: white; font-weight: bold; text-transform: uppercase; margin: 0; font-size: 24px; letter-spacing: 1px;">
+                    Sistema de Control de Inventario y Suministros (SISCOINS)
+                </h2>
+            </div>
+        </div>
+
+        <div class="row menu-row">
+            <div class="menu-wrapper" style="display: flex; justify-content: flex-end; gap: 20px;">
+                <a href="#home" style="color: white !important; font-weight: bold !important; text-decoration: none;">🏠 HOME</a>
+                <a href="{% url 'login' %}" style="color: white !important; font-weight: bold !important; text-decoration: none;">🚪 ENTRAR</a>
+            </div>
+        </div>
+    </div>
+</header>
+    <!--End Navigation-->
+
+<section id="home" class="home" style="padding: 0; margin: 0; overflow: hidden;">
+    
+    <div style="display: flex; width: 100%; height: 100vh; gap: 0;">
+        
+        <div style="flex: 1; overflow: hidden;">
+            <img src="{% static 'images/slider/1.png' %}" alt="Imagen 1" 
+                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+
+        <div style="flex: 1; overflow: hidden;">
+            <img src="{% static 'images/slider/2.png' %}" alt="Imagen 2" 
+                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+
+        <div style="flex: 1; overflow: hidden;">
+            <img src="{% static 'images/slider/3.png' %}" alt="Imagen 3" 
+                 style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        </div>
+
+    </div>
+
+</section>
+
+    <script>
+        function toggleDropdown(id) {
+        // Alterna la clase 'show' en el contenido del dropdown
+        document.getElementById(id).classList.toggle("show");
+            }
+
+            // Opcional: Cierra el dropdown si el usuario hace clic fuera de él
+            window.onclick = function(event) {
+                if (!event.target.matches('.dropbtn')) {
+                    var dropdowns = document.getElementsByClassName("dropdown-content");
+                    for (var i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+        </script>
+
+{% endblock contenido %}
+

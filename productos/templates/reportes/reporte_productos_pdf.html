@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ titulo_reporte }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            /* 1. CONFIGURACIÓN DE PÁGINA (Horizontal para productos) */
+            @page {
+                size: letter landscape;
+                margin: 1cm;
+            }
+
+            /* Marco de la Cabecera */
+            @frame header {
+                -pdf-frame-content: header-content;
+                top: 0.5cm; 
+                left: 1cm;
+                right: 1cm;
+                height: 2.5cm; 
+            }
+
+            /* Marco del Contenido Principal */
+            @frame content {
+                top: 3.2cm;   /* Espacio libre tras el header */
+                left: 1cm;
+                right: 1cm;
+                bottom: 2cm; 
+            }
+
+            /* Marco del Pie de Página */
+            @frame footer {
+                -pdf-frame-content: footer-content;
+                bottom: 0.5cm; 
+                left: 1cm;
+                right: 1cm;
+                height: 1cm; 
+            }
+            
+            /* 2. ESTILOS BASE */
+            body { font-family: Arial, sans-serif; font-size: 8pt; color: #333; }
+            
+            /* REEMPLAZO DE FLEX POR TABLA (Para evitar amontonamiento) */
+            .header-table { width: 100%; border: 0; }
+            .header-logo { width: 15%; text-align: left; }
+            .header-title { width: 70%; text-align: center; }
+            .header-info { width: 15%; text-align: right; font-size: 7pt; }
+
+            h2 { margin: 0; padding: 0; color: #1a4f8d; font-size: 16pt; }
+            .header-separator { border-bottom: 2px solid #1a4f8d; margin-top: 5px; }
+            
+            /* 3. ESTILOS DE TABLA DE DATOS */
+            table.data-table { width: 100%; border-collapse: collapse; }
+            
+            /* Repetición automática de cabecera en cada página */
+            thead { display: table-header-group; } 
+            
+            table.data-table th { 
+                background-color: #1a4f8d; 
+                color: white; 
+                font-weight: bold; 
+                text-transform: uppercase; 
+                padding: 6px; 
+                border: 1px solid #1a4f8d;
+                font-size: 7.5pt;
+            }
+
+            table.data-table td { 
+                border: 1px solid #ddd; 
+                padding: 4px; 
+                vertical-align: middle;
+            }
+
+            .text-center { text-align: center; }
+            .text-right { text-align: right; }
+            .bg-gray { background-color: #f9f9f9; }
+
+            #footer-content { border-top: 1px solid #ccc; padding-top: 5px; font-size: 7pt; color: #666; }
+        </style>
+    </head>
+
+    <body>
+        <div id="header-content">
+            <table class="header-table">
+                <tr>
+                    <td class="header-logo">
+                        <img src="{{ logo_path }}" style="max-height: 1.8cm; width: auto;"/>
+                    </td>
+                    <td class="header-title">
+                        <h2>{{ titulo_reporte | upper }}</h2>
+                    </td>
+                    <td class="header-info">
+                        Emitido: {{ fecha_emision|date:"d/m/Y" }}<br>
+                        Hora: {{ fecha_emision|date:"H:i" }}
+                    </td>
+                </tr>
+            </table>
+            <div class="header-separator"></div>
+        </div> 
+
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="3%">#</th>
+                    <th width="8%">Código</th>
+                    <th width="22%">Descripción</th>
+                    <th width="12%">Categoría</th>
+                    <th width="8%">Unidad</th>
+                    <th width="7%">Stock Mín.</th>
+                    <th width="7%">Stock Máx.</th>
+                    <th width="8%">Existencia</th>
+                    <th width="8%">Costo</th>
+                    <th width="17%">Observaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                    <tr class="{% if forloop.counter|divisibleby:2 %}bg-gray{% endif %}">
+                        <td class="text-center">{{ forloop.counter }}</td>
+                        <td class="text-center"><strong>{{ producto.cod_producto }}</strong></td>
+                        <td style="text-align: left;">{{ producto.descripcion|upper }}</td>
+                        <td class="text-center">{{ producto.cod_categoria.descripcion|default:"-" }}</td>
+                        <td class="text-center">{{ producto.cod_unidad.descripcion|default:"-" }}</td>
+                        <td class="text-right">{{ producto.stock_minimo_global|floatformat:2 }}</td>
+                        <td class="text-right">{{ producto.stock_maximo|floatformat:2 }}</td>
+                        <td style="text-align: right; 
+                            {% if producto.cantidad <= producto.stock_minimo_global %}
+                                background-color: #fce4e4;
+                            {% endif %}">
+                            
+                            {{ producto.cantidad|floatformat:2|default:"0.00" }}
+                            
+                            {% if producto.cantidad <= producto.stock_minimo_global %}
+                                <span title="Stock Bajo" style="color: #d80606; margin-left: 5px;">
+                                    <i class="fa fa-exclamation-triangle"></i>
+                                </span>
+                            {% else %}
+                                <span title="Stock OK" style="color: #10a33c; margin-left: 5px;">
+                                    <i class="fa fa-check-circle"></i>
+                                </span>
+                            {% endif %}
+                        </td>
+
+                        <td class="text-right">{{ producto.costo_compra|floatformat:2 }}</td>
+                        <td style="text-align: left;">{{ producto.observaciones|default:" "|upper|safe }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="margin-top: 10px; text-align: right; font-weight: bold;">
+            Total insumos listados: {{ productos|length }}
+        </div>
+
+        <div id="footer-content">
+            <div style="float: left;">Reporte de Inventario</div>
+            <div style="float: right;">Página <pdf:pagenumber> de <pdf:pagecount></div>
+        </div>
+    </body>
+</html>

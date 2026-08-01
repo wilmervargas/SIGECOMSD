@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo %}
+    {{ titulo }}
+{% endblock titulo %}
+
+{% block contenido %}
+
+    <section id="one" class="wrapper style2" style="padding: 10px 0 !important;">
+        <h2 style="color:blue; text-align:center; font-weight:bold; margin-bottom: 5px;">TABLA DE PROTOCOLOS - EDITAR</h2>
+        {% include 'protocolos/formulario.html' %}
+    </section>
+
+{% endblock contenido %}

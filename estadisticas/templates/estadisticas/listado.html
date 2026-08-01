@@ -1,0 +1,257 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+{% block titulo %}
+    {{ titulo }}
+{% endblock titulo %}
+
+{% block contenido %}
+<style>
+    /* Estilo para que la tabla sea uniforme y pequeña */
+    .tabla-estadistica {
+        font-size: 11px; /* Letra pequeña y uniforme */
+        font-family: 'Arial', sans-serif;
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Encabezado Fijo (Sticky) */
+    .tabla-estadistica thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f2f2f2;
+        z-index: 5;
+        padding: 5px;
+        border-bottom: 2px solid #ccc;
+    }
+
+    .tabla-estadistica td {
+        padding: 4px;
+        vertical-align: middle;
+    }
+
+    /* Clases de utilidad */
+    .text-center { text-align: center; }
+    .text-left { text-align: left; }
+    .text-right { text-align: right; }
+</style>
+
+    <section id="three" style="width: 98%;
+            max-width: none !important;
+            margin-top: 10px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;">
+        <div>
+            <h4 style="color:white; text-align:center; font-weight:bold; margin-top: 5px; margin-bottom: 5px;">RANKING DE INSUMOS PROCESADOS
+        </div>
+
+        <header class="align-center" style="
+            display: flex; 
+            gap: 5px; 
+            justify-content: center; 
+            padding: 0px 0; margin-top: -8px; margin-bottom: 0px;">
+
+            <a href="{% url 'reporte_ranking_salidas_pdf' %}?order_by={{ order_by }}&{{ full_query_string }}" 
+                target="_blank"
+                rel="noopener noreferrer"
+                class="button special icon fa-file-pdf-o"
+                title="Exportar a PDF"
+                style="
+                    background-color: #d80606; 
+                    color: white;
+                    padding: 2px 4px;
+                    width: 70px;
+                    font-size: 1.0em; 
+                    border-radius: 6px; 
+                    transition: all 0.2s;
+                    display: flex; 
+                    justify-content: center; 
+                    align-items: center; 
+                    margin-top: 10px;">PDF
+            </a> 
+            
+            <div class="align-right">
+                <a href="{% url 'dashboard' %}" 
+                    class="button special icon fa-arrow-left" 
+                    style="
+                        background-color: #0b2df0; 
+                        color: white;
+                        padding: 2px 4px;
+                        width: 70px;
+                        font-size: 1.0em; 
+                        border-radius: 6px; 
+                        transition: all 0.2s;
+                        display: flex; 
+                        justify-content: center; 
+                        align-items: center; 
+                        margin-top: 10px;">Salir</a>
+            </div>
+        </header>
+
+            <div class="inner" style="max-width: 100% !important; width: 100% !important; padding-left: 0 !important; padding-right: 0 !important;">
+                <div class="box" style="margin-top: 0px; margin-bottom: 0px; border-radius: 10px !important; width: 100% !important; padding: 0 !important;">
+                    <div class="content" style="padding: 0 !important; width: 100% !important; justify-content: center;">
+                    
+                        <!-- Banda azul reducida en altura -->
+                        <div class="align-center" style="margin-top: 0px; border: 0px solid white; padding: 2px 15px; border-radius: 5px; background-color: rgba(31, 146, 192, 0.247); width: 100% !important; box-sizing: border-box;">
+                            
+                            <form method="get" action="{% url 'listado_ranking_salidas' %}" style="margin: 0 !important; padding: 0 !important; width: 100%;">
+
+                                <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 5px;">
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    <div style="margin-bottom: 12px;">
+                                        <strong>Fecha Requisicion Desde</strong>
+                                    </div>
+                                    {{ filter_form.fecha_requi_desde }}  
+                                </div>
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    <div style="margin-bottom: 12px;">
+                                        <strong>Fecha Requisicion Hasta</strong>
+                                    </div> 
+                                    {{ filter_form.fecha_requi_hasta }}  
+                                </div>
+
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    {{ filter_form.estado.label_tag }}
+                                    <div style="pointer-events: none; cursor: not-allowed;">
+                                        {{ filter_form.estado }}
+                                    </div>
+                                </div>
+
+                                <div style="flex: 1; min-width: 100px; max-width: 14%; margin-top: 5px;">
+                                    {{ filter_form.tipo_salida.label_tag }}
+                                    {{ filter_form.tipo_salida }}
+                                </div>
+                                <div style="min-width: 30px; max-width: 30px">
+                                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                                        
+                                        <button type="submit" 
+                                            class="button special" 
+                                            title="Aplicar Filtros" 
+                                            style="
+                                                background-color: #3e858e; 
+                                                color: white; 
+                                                width: 40px; /* Tamaño del botón */
+                                                height: 40px; /* Altura igual al ancho para círculo */
+                                                padding: 0;
+                                                border-radius: 50%; /* ¡Lo hace circular! */
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                            <i class="fa fa-filter"></i>
+                                        </button>
+                                        
+                                        <a href="{% url 'listado_ranking_salidas' %}" 
+                                            class="button special" 
+                                            title="Limpiar Filtros" 
+                                            style="
+                                                background-color: #9c9c9c; 
+                                                color: white; 
+                                                width: 40px; 
+                                                height: 40px; 
+                                                padding: 0;
+                                                border-radius: 50%; /* ¡Lo hace circular! */
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;">
+                                                <i class="fa fa-refresh"></i>
+                                        </a>                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                <div>
+
+                <tr>
+                    {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                </tr>
+            </div>
+
+                    <div class="col-12" style="overflow-x: auto;">
+                        <table class="tabla-estadistica">
+                            <thead>
+                                <tr style="background-color: #f4f4f4;">
+                                    <th style="width: 6%; text-align: left; padding-left: 10px;">CODIGO</th>
+                                    <th style="width: 25%; text-align: left; padding-left: 10px;">DESCRIPCION INSUMO (RANKING)</th>
+                                    <th style="width: 8%; text-align: center;">STOCK ACTUAL</th>
+                                    <th style="width: 8%; text-align: center;">CANT. TOTAL</th>
+                                    <th style="padding: 0; background-color: #ebedef; border-bottom: 2px solid #ccc;">
+                                        <table style="width: 100%; margin: 0; border: none; table-layout: fixed;">
+                                            <tr style="font-weight: bold; text-transform: uppercase; color: #444;">
+                                                <td style="width: 85px; border: none; text-align: left; padding-left: 10px;">N° Requis.</td>
+                                                <td style="width: 85px; border: none; text-align: center;">Fec.Requi.</td>
+                                                <td style="width: 85px; border: none; text-align: center;">Fec.Aprob.</td>
+                                                <td style="width: 300px; border: none; text-align: center;">DEPENDENCIA</td>
+                                                <td style="border: none; text-align: center;">Cant.Entregada</td>
+                                            </tr>
+                                        </table>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in ranking %}
+                                <tr style="border-bottom: 1px solid #ccc;">
+                                    <td>
+                                        <strong>{{ item.cod_producto__cod_producto }}</strong>
+                                    </td>
+                                    <td class="text-left" style="padding-left: 10px;">
+                                        {{ item.cod_producto__descripcion|upper }}
+                                    </td>
+                                    <td class="text-center" style="background-color: #f9f9f9; border-left: 1px solid #eee; border-right: 1px solid #eee; color: #3b18d6;">
+                                        <strong>{{ item.cod_producto__cantidad|floatformat:2 }}</strong>
+                                    </td>
+                                    <td class="text-center" style="background-color: #f9f9f9; border-left: 1px solid #eee; border-right: 1px solid #eee; color: #3b18d6;">
+                                        <strong>{{ item.total_qty|floatformat:2 }}</strong>
+                                    </td>
+
+                                    <td style="padding: 0; vertical-align: top;">
+                                        <table style="width: 100%; margin: 0; border: none; table-layout: fixed; font-size: 11px;">
+                                            {% for d in detalles_raw %}
+                                                {% if d.cod_producto_id == item.cod_producto_id %}
+                                                    <tr style="border-bottom: 1px solid #f0f0f0; background-color: {% cycle '#ffffff' '#fcfcfc' %};">
+                                                        <td style="text-align: center; width: 85px; border: none; padding-left: 10px;"><strong>{{ d.encabezado.num_requi }}</strong></td>
+                                                        <td style="text-align: center; width: 85px; border: none; text-align: center;">{{ d.encabezado.fecha_requi|date:"d/m/Y" }}</td>
+                                                        <td style="text-align: center; width: 85px; border: none; text-align: center;">{{ d.encabezado.fecha_aprobacion|date:"d/m/Y" }}</td>
+                                                        <td style="text-align: center; width: 300px; border: none; ">{{ d.encabezado.cod_dependencia_soli }}</td>
+                                                        <td style="text-align: center; border: none; font-weight: 600;">{{ d.cant_entregada|floatformat:2 }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </table>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center" style="padding: 20px;">No se encontraron registros para los filtros seleccionados.</td> 
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            {% if ranking %}
+                            <tfoot style="background-color: #333; color: white; font-weight: bold; font-size: 11px;">
+                                <tr>
+                                    <td class="text-right" style="padding: 8px 10px;"></td>
+                                    <td class="text-center" style="background-color: #444;">TOTALES GENERALES:</td>
+                                    <td class="text-center" style="padding-right: 10px;">{{ totales_general.t_cant|floatformat:2 }}</td>
+                                    <td></td>
+                                </tr>
+                            </tfoot>
+                            {% endif %}
+                        </table>
+                    </div>
+
+                    <div>
+                        {% include 'paginador.html' with order_by=order_by query_string=query_string %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock contenido %}

@@ -1,0 +1,332 @@
+
+{% load static %}
+{% load l10n %}
+
+{% block contenido %}
+
+<section id="three" class="wrapper style2">
+    <div class="inner" style="max-width: 1350px; margin: 0 auto;">
+        <div class="box">
+            <div class="content">
+                <form method="post" style="margin: 0;" enctype="multipart/form-data">
+
+                    {% if formulario.errors %}
+                        <div style="background: #fee2e2; border: 1px solid #ef4444; padding: 15px; border-radius: 6px; margin-bottom: 20px; color: #b91c1c;">
+                            <strong>⚠️ Errores en el formulario principal:</strong>
+                            {{ formulario.errors }}
+                        </div>
+                    {% endif %}
+
+                    {% csrf_token %}
+                    <input type="hidden" name="query_string" value="{{ query_string }}">
+                    
+                    <div class="sub-section-frame" style="padding: 5px !important;">
+                        <h4 style="color: #3b18d6; margin-bottom: 20px; font-weight: bold; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; display: flex; gap: 10px; align-items: center; width: 100%;">
+                            <span>📋 Datos Principales del Formulario (Versión Actual)</span>
+                            {% if not formulario.instance.pk %}
+                                <span class="badge-new">Nuevo</span>
+                            {% else %}
+                                <span class="badge-edit">Editando</span>
+                            {% endif %}
+                        </h4>
+
+                        {% if formulario.instance.pk %}
+                            <div style="width: 100%; background: #eff6ff; border-left: 4px solid #af1e36; padding: 8px 12px; margin-bottom: 25px; font-size: 1.5rem !important; line-height: 1.4; color: #af1e36; border-radius: 0 6px 6px 0; box-sizing: border-box;">
+                                <strong>ℹ️ Nota importante:</strong> Si cambia el <strong>Código del Formulario</strong> es porque desea crear un nuevo formulario o una nueva estructura de codificación; en consecuencia, el sistema archivará este registro en el histórico.
+                            </div> 
+                        {% endif %}
+
+                        <div class="form-main-container">
+                            <div class="row uniform" style="margin-bottom: 50px; display: flex; align-items: flex-start;">
+                                <div class="col-2 col-12-small" style="width: 185px;">
+                                    <label class="form-label" style="color: #3b18d6;">Código Formulario</label>
+                                    {{ formulario.cod_formulario }}
+                                    {% if formulario.cod_formulario.errors %}
+                                        <span style="color: red; font-size: 0.8em;">{{ formulario.cod_formulario.errors }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-3 col-12-small" style="width: 400px;">
+                                    <label class="form-label" style="color: #3b18d6;">Dependencia Responsable</label>
+                                    {{ formulario.cod_dependencia }}
+                                    {% if formulario.cod_dependencia.errors %}
+                                        <span style="color: red; font-size: 0.8em;">{{ formulario.cod_dependencia.errors }}</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-5 col-12-small" style="width: 400px; height: 80px;">
+                                    <label class="form-label" style="color: #3b18d6;">Título Actual</label>
+                                    {{ formulario.titulo }}
+                                </div>
+                                
+                                <div class="col-2 col-12-small" style="width: 150px;">
+                                    <label class="form-label" style="color: #3b18d6;">Versión</label>
+                                    {{ formulario.version }}
+                                </div>
+                            </div>
+
+                            <div class="row uniform" style="margin-bottom: 25px; display: flex; align-items: flex-start;">
+                                <div class="col-3 col-12-small">
+                                    <label class="form-label" style="color: #3b18d6;">Fecha Elaboración</label>
+                                    {{ formulario.fecha_elaboracion }}
+                                </div>
+                                <div class="col-3 col-12-small">
+                                    <label class="form-label" style="color: #3b18d6;">Fecha Revisión</label>
+                                    {{ formulario.fecha_revision }}
+                                </div>
+                                <div class="col-3 col-12-small">
+                                    <label class="form-label" style="color: #3b18d6;">Fecha Aprobación</label>
+                                    {{ formulario.fecha_aprobacion }}
+                                </div>
+                                <div class="col-3 col-12-small">
+                                    <div class="align-bottom-content">
+                                        <label class="form-label" style="text-align: center; display: block;">Distribución Permitida</label>
+                                        
+                                        <div class="checkbox-wrapper" style="gap: 24px; justify-content: center; align-items: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px; display: flex; width: 100%;">
+                                            <label for="id_distribucion_digital" style="color: #3b18d6; font-weight: 600; font-size: 0.85em; cursor: pointer; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <span>Digital</span>
+                                                {{ formulario.distribucion_digital }}
+                                            </label>
+                                            
+                                            <label for="id_distribucion_fisica" style="color: #3b18d6; font-weight: 600; font-size: 0.85em; cursor: pointer; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                                <span>Física</span>
+                                                {{ formulario.distribucion_fisica }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row uniform" style="margin-top: -10px; display: flex; align-items: flex-end; gap: 20px;">
+                                    <div class="col-8" style="width: 400px; flex-grow: 1;">
+                                        <label class="form-label"  style="color: #3b18d6;">Observaciones Expandidas del Formulario</label>
+                                        {{ formulario.observaciones }}
+                                    </div>
+                                </div>
+
+                                <div class="row uniform" style="margin-top: -10px; display: flex; align-items: flex-end;">
+                                    <div class="col-4" style="width: auto; min-width: 220px;"> <label class="form-label" style="display: block; margin-bottom: 5px; color: #3b18d6;">Ejemplar PDF</label>
+                                        <div style="display: flex; gap: 6px; align-items: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px; height: 42px; width: fit-content;">
+                                            
+                                            {% if formulario.instance.archivo_pdf %}
+                                                <a href="{{ formulario.instance.archivo_pdf.url }}" target="_blank" class="button small icon fa-file-pdf-o" 
+                                                style="background-color: #e11d48; color: white; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;"
+                                                title="Ver PDF actual">
+                                                </a>
+
+                                                <label for="{{ formulario.archivo_pdf.id_for_label }}" class="button small icon fa-upload" 
+                                                    style="background-color: #0284c7; color: white; cursor: pointer; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;"
+                                                title="Subir o reemplazar por otro PDF">
+                                                </label>
+                                                <input type="file" name="{{ formulario.archivo_pdf.html_name }}" id="{{ formulario.archivo_pdf.id_for_label }}" style="display: none;">
+
+                                                <div style="display: inline-flex; align-items: center;">
+                                                    <label for="{{ formulario.archivo_pdf.html_name }}-clear_id" id="label_clear_cabecera" class="button small icon fa-unlink" 
+                                                        style="background-color: #475569; color: white; cursor: pointer; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0; transition: all 0.2s;"
+                                                        title="Quitar vínculo del archivo (Dejar vacío)">
+                                                    </label>
+                                                    <input type="checkbox" name="{{ formulario.archivo_pdf.html_name }}-clear" id="{{ formulario.archivo_pdf.html_name }}-clear_id" style="display: none;">
+                                                </div>
+
+                                            {% else %}
+                                                <div style="display: inline-flex; align-items: center;">
+                                                    <label for="{{ formulario.archivo_pdf.id_for_label }}" class="button small icon fa-upload" 
+                                                        style="background-color: #0284c7; color: white; cursor: pointer; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;"
+                                                    title="Subir o reemplazar por otro PDF">
+                                                    </label>
+                                                    <input type="file" name="{{ formulario.archivo_pdf.html_name }}" id="{{ formulario.archivo_pdf.id_for_label }}" style="display: none;">
+                                                </div>
+                                            {% endif %}
+                                            
+                                            <span id="cabecera_pdf_nombre" style="font-size: 0.8em; color: #475569; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; margin-left: 4px;"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="sub-section-frame">
+                        <h4 style="color: #3b18d6; margin-bottom: 15px; font-weight: bold; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">
+                            📦 Historial Completo de Versiones Anteriores (Históricos)
+                        </h4>
+                        
+                        {{ formset.management_form }}
+                        
+                        <div class="table-wrapper" style="margin-top: 15px; overflow-x: auto;">
+                            <table id="detalle-formulario-table" class="alt">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 12%; text-align: left;">Cód.Formulario</th>
+                                        <th style="width: 30%; text-align: left;">Título Anterior</th>
+                                        <th style="width: 5%; text-align: left;">Versión</th>
+                                        <th style="width: 10%; text-align: center;">Fecha Elab.</th>
+                                        <th style="width: 10%; text-align: center;">Fecha Revis.</th>
+                                        <th style="width: 10%; text-align: center;">Fecha Aprob.</th>
+                                        <th style="width: 5%; text-align: center;">Dist. Digital</th>
+                                        <th style="width: 5%; text-align: center;">Dist. Física</th>
+                                        <th style="width: 30%; text-align: left;">Observaciones</th>
+                                        <th style="width: 5%; text-align: left;">Ejemplar</th>
+                                        <th style="width: 3%; text-align: center;">Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for form in formset %}
+                                    <tr class="formset-row" style="height: 68px;">
+                                        <td style="vertical-align: middle !important; text-align: left;">
+                                            <div style="display: flex; align-items: center; min-height: 30px;">
+                                                {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+                                                {{ form.cod_formulario }}
+                                            </div>
+                                        </td>
+                                        
+                                        <td style="vertical-align: middle !important; text-align: left;">
+                                            <div style="display: flex; align-items: center; min-height: 30px; width: 100%;">
+                                                {{ form.titulo }}
+                                            </div>
+                                        </td>
+                                        
+                                        <td style="vertical-align: middle !important; text-align: left;">
+                                            <div style="display: flex; align-items: center; min-height: 30px; width: 100%;">
+                                                {{ form.version }}
+                                            </div>
+                                        </td>
+                                        
+                                        <td style="vertical-align: middle !important; text-align: center;">
+                                            <div style="display: flex; justify-content: center; align-items: center; min-height: 30px; width: 100%;">
+                                                {{ form.fecha_elaboracion }}
+                                            </div>
+                                        </td>
+                                        
+                                        <td style="vertical-align: middle !important; text-align: center;">
+                                            <div style="display: flex; justify-content: center; align-items: center; min-height: 30px; width: 100%;">
+                                                {{ form.fecha_revision }}
+                                            </div>
+                                        </td>
+                                        
+                                        <td style="vertical-align: middle !important; text-align: center;">
+                                            <div style="display: flex; justify-content: center; align-items: center; min-height: 30px; width: 100%;">
+                                                {{ form.fecha_aprobacion }}
+                                            </div>
+                                        </td>
+                                        
+                                        <td style="vertical-align: middle !important; text-align: center; padding: 0 !important;">
+                                            <div style="display: flex; justify-content: center; align-items: center; min-height: 60px; width: 100%; font-size: 9px !important; margin: 0 !important; padding: 0 !important;">
+                                                {{ form.distribucion_digital }}
+                                            </div>
+                                        </td>
+
+                                        <td style="vertical-align: middle !important; text-align: center; padding: 0 !important;">
+                                            <div style="display: flex; justify-content: center; align-items: center; min-height: 60px; width: 100%; font-size: 9px !important; margin: 0 !important; padding: 0 !important;">
+                                                {{ form.distribucion_fisica }}
+                                            </div>
+                                        </td>
+
+                                        <td style="vertical-align: middle !important; text-align: left;">
+                                            <div style="display: flex; align-items: center; min-height: 30px; width: 100%;">
+                                                {{ form.observaciones }}
+                                            </div>
+                                        </td>
+
+                                        <td style="vertical-align: middle !important; text-align: center;">
+                                            <div style="display: flex; justify-content: center; align-items: center; gap: 6px; width: 100%;">
+                                                {% if form.instance.archivo_pdf %}
+                                                    <a href="{{ form.instance.archivo_pdf.url }}" target="_blank" class="button small icon fa-file-pdf-o" 
+                                                    style="background-color: #e11d48; color: white; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;"
+                                                    title="Ver PDF anterior">
+                                                    </a>
+                                                    <label for="{{ form.archivo_pdf.id_for_label }}" class="button small icon fa-upload" 
+                                                        style="background-color: #0284c7; color: white; cursor: pointer; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;"
+                                                        title="Subir o reemplazar por otro PDF">
+                                                    </label>
+                                                    <input type="file" name="{{ form.archivo_pdf.html_name }}" id="{{ form.archivo_pdf.id_for_label }}" style="display: none;">
+                                                {% else %}
+                                                    <label for="{{ form.archivo_pdf.id_for_label }}" class="button small icon fa-upload" 
+                                                        style="background-color: #0284c7; color: white; cursor: pointer; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;"
+                                                        title="Subir o reemplazar por otro PDF">
+                                                    </label>
+                                                    <input type="file" name="{{ form.archivo_pdf.html_name }}" id="{{ form.archivo_pdf.id_for_label }}" style="display: none;">
+                                                {% endif %}
+                                            </div>
+                                        </td>
+
+                                        <td style="vertical-align: middle !important; text-align: center;">
+                                            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                                                <button type="button" class="button small icon fa-trash delete-row-button" 
+                                                        style="background-color: #dc2626; color: white; border: none; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;">
+                                                </button>
+                                                {% if formset.can_delete %}
+                                                    <div style="display:none;">{{ form.DELETE }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="11" style="text-align: center; padding: 25px !important; color: #64748b; font-style: italic;">
+                                            No existen registros históricos para este FORMULARIO.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 25px;">
+                        <button style="background-color: #16a34a; color: white; border: none; padding: 0 24px; height: 42px; border-radius: 6px; font-weight: 600; cursor: pointer;" type="submit" class="button special icon fa-save">
+                            Grabar Formulario e Historial
+                        </button>
+                        <a href="{% url 'listado_formularios' %}?{{ query_string }}" style="background-color: #dc2626; color: white; text-decoration: none; padding: 0 24px; height: 42px; line-height: 42px; border-radius: 6px; font-weight: 600; display: inline-block;" class="button alt icon fa-close">
+                            Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const formsetContainer = document.querySelector('#detalle-formulario-table tbody');
+
+        // 1.- Borrado explícito con el botón de la papelera
+        function deleteForm(event) {
+            const row = event.target.closest('.formset-row');
+            if (!row) return;
+            const deleteInput = row.querySelector('input[name$="-DELETE"]');
+            if (deleteInput) {
+                deleteInput.checked = true;
+                row.style.display = 'none';
+            }
+        }
+
+        // 2.- Bloquear que presionar ENTER en los campos de cabecera altere o envíe el subformulario
+        document.querySelectorAll('.form-main-container input, .form-main-container select').forEach(input => {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+
+        // Vincular listeners a botones de eliminar iniciales
+        document.querySelectorAll('.delete-row-button').forEach(btn => btn.addEventListener('click', deleteForm));
+
+        // Listener dinámico para reflejar el nombre del archivo seleccionado en el Formulario de Cabecera (id_archivo_pdf)
+        const cabeceraFileInput = document.getElementById('id_archivo_pdf');
+        if (cabeceraFileInput) {
+            cabeceraFileInput.addEventListener('change', function(e) {
+                const fileName = e.target.files[0] ? e.target.files[0].name : '';
+                const displaySpan = document.getElementById('cabecera_pdf_nombre');
+                if (displaySpan) {
+                    displaySpan.textContent = fileName;
+                }
+            });
+        }
+    });
+</script>
+{% endblock contenido %}
