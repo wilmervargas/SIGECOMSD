@@ -302,7 +302,7 @@ def reporte_directores_excel(request):
     ws.title = "Reporte directores"
     
     # --- 2. INSERCIÓN DEL LOGO ---
-    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo_inven.png')
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo2.png')
     try:
         img = OpenpyxlImage(logo_path)
         ws.row_dimensions[1].height = 50
@@ -430,7 +430,7 @@ def reporte_directores_pdf(request):
     
     # IMPORTANTE: Generar la URL absoluta para el logo
     try:
-        logo_url = request.build_absolute_uri('/static/img/logo_inven.png') 
+        logo_url = request.build_absolute_uri('/static/img/logo2.png') 
     except AttributeError:
         logo_url = "" 
 

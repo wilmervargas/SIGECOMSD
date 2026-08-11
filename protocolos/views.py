@@ -307,7 +307,7 @@ def reporte_protocolos_pdf(request):
     context = {
         'protocolos': protocolos,
         'titulo_reporte': 'Reporte de Protocolos',
-        'logo_path': f"{settings.STATIC_URL}img/membrete.png",
+        'logo_path': f"{settings.STATIC_URL}img/logo2.png",
         'fecha_emision': datetime.now(),
     }
     

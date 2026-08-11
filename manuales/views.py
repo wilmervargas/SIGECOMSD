@@ -307,7 +307,7 @@ def reporte_manuales_pdf(request):
     context = {
         'manuales': manuales,
         'titulo_reporte': 'Reporte de Manuales',
-        'logo_path': f"{settings.STATIC_URL}img/membrete.png",
+        'logo_path': f"{settings.STATIC_URL}img/logo2.png",
         'fecha_emision': datetime.now(),
     }
     

@@ -86,79 +86,56 @@
             <div class="header-separator"></div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th width="10%">Orden/Fecha</th>
-                    <th width="10%">ESTADO</th>
-                    <th width="8%">Factura/Fecha</th>
-                    <th width="15%">Proveedor</th>
-                    <th width="7%">Mto.Fact.</th>
-                    <th width="10%">Codigo</th>
-                    <th width="30%">Producto</th>
-                    <th width="15%">Und.Medida</th>
-                    <th width="10%">Cant.Recibida</th>
-                </tr>
-            </thead>
-<tbody>
-    {% for entrada in entity %}
-        {% with detalles=entrada.detalles.all %}
-            {% if detalles %}
-                {% for detalle in detalles %}
-                <tr>
-                    {% if forloop.first %}
-                        <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
-                            <strong>{{ entrada.num_orden }}</strong><br>
-                            {{ entrada.fecha_orden|date:"d/m/Y" }}<br>
-                        </td>
-
-                        <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
-                            <span style="font-size: 7pt; color: #3b18d6;">{{ entrada.estado }}</span>
-                        </td>
-                        <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
-                            {{ entrada.num_factura|default:"---" }}<br>
-                            {{ entrada.fecha_factura|date:"d/m/Y" }}
-                        </td>
-                        <td rowspan="{{ detalles.count|default:1 }}">
-                            {{ entrada.ced_proveedor.nombres_apellidos|default:"No Registrado" }}<br>
-                            <small>{{ entrada.ced_proveedor.ced_proveedor|default:"" }}</small>
-                        </td>
-                        <td rowspan="{{ detalles.count|default:1 }}" class="text-right">
-                            {{ entrada.monto_factura|default:0 }}
-                        </td>
-                    {% endif %}
-                    <td>{{ detalle.cod_producto.cod_producto }}</td>
-                    <td>{{ detalle.cod_producto.descripcion|truncatechars:30 }}</td>
-                    <td>{{ detalle.cod_producto.cod_unidad }}</td>
-                    <td class="text-right">{{ detalle.cant_recibida|default:0 }}</td>
-                </tr>
-                {% endfor %}
-            {% else %}
-                <tr>
-                    <td class="text-center">
-                        <strong>{{ entrada.num_orden }}</strong><br>
-                        {{ entrada.fecha_orden|date:"d/m/Y" }}<br>
-                        <span style="font-size: 7pt; color: #3b18d6;">{{ entrada.estado }}</span>
-                    </td>
-                    <td class="text-center">
-                        {{ entrada.num_factura|default:"---" }}<br>
-                        {{ entrada.fecha_factura|date:"d/m/Y" }}
-                    </td>
-                    <td>
-                        {{ entrada.ced_proveedor.nombres_apellidos|default:"No Registrado" }}
-                    </td>
-                    <td class="text-right">{{ entrada.monto_factura|default:0 }}</td>
-                    <td colspan="7" class="text-center" style="color: gray;"><em>Orden sin productos registrados</em></td>
-                </tr>
-            {% endif %}
-        {% endwith %}
-    {% empty %}
+<table>
+    <thead>
         <tr>
-            <td colspan="11" class="text-center">No se encontraron entradas con los filtros seleccionados.</td>
+            <th width="10%">CÓDIGO</th>
+            <th width="40%">DESCRIPCIÓN DEL PRODUCTO</th>
+            <th width="25%">UNIDAD DE MEDIDA</th>
+            <th width="25%">CANT. RECIBIDA</th>
         </tr>
-    {% endfor %}
-</tbody>
-        </table>
+    </thead>
+    <tbody>
+        {% for entrada in entity %}
+            <!-- Fila de cabecera de la Orden (agrupa la información general) -->
+            <tr class="row-header">
+                <td colspan="4" style="background-color: #e6ecf5; padding: 6px; border: 1px solid #b0c4de;">
+                    <strong>Orden N°:</strong> {{ entrada.num_orden }} | 
+                    <strong>Fec. Orden:</strong> {{ entrada.fecha_orden|date:"d/m/Y" }} | 
+                    <strong>Estado:</strong> <span style="color: #3b18d6;">{{ entrada.estado }}</span> | 
+                    <strong>Factura:</strong> {{ entrada.num_factura|default:"---" }} ({{ entrada.fecha_factura|date:"d/m/Y"|default:"---" }}) <br>
+                    <strong>Proveedor:</strong> {{ entrada.ced_proveedor.nombres_apellidos|default:"No Registrado" }} 
+                    {% if entrada.ced_proveedor.ced_proveedor %}({{ entrada.ced_proveedor.ced_proveedor }}){% endif %} | 
+                    <strong>Monto Fact.:</strong> {{ entrada.monto_factura|default:0 }}
+                </td>
+            </tr>
+
+            <!-- Filas de Detalles / Productos -->
+            {% with detalles=entrada.detalles.all %}
+                {% if detalles %}
+                    {% for detalle in detalles %}
+                    <tr>
+                        <td class="text-center">{{ detalle.cod_producto.cod_producto }}</td>
+                        <td>{{ detalle.cod_producto.descripcion|truncatechars:45 }}</td>
+                        <td class="text-center">{{ detalle.cod_producto.cod_unidad }}</td>
+                        <td class="text-right">{{ detalle.cant_recibida|default:0 }}</td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center" style="color: gray;">
+                            <em>Orden sin productos registrados</em>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endwith %}
+        {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">No se encontraron entradas con los filtros seleccionados.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
         
         <div id="footer-content">
             <hr>

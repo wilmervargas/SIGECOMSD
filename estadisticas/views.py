@@ -145,7 +145,7 @@ def reporte_ranking_salidas_pdf(request):
     # 5. LOGO (Mantenemos tu lógica existente)
     try:
         # Ajusta esta ruta según donde tengas tu logo para PDF
-        logo_url = request.build_absolute_uri('/static/img/logo_inven.png') 
+        logo_url = request.build_absolute_uri('/static/img/logo2.png') 
     except Exception:
         logo_url = "" 
 

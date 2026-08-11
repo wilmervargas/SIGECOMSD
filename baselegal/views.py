@@ -82,7 +82,7 @@ def listado_baselegal(request):
         raise Http404('*** Página no encontrada ***')
 
     datos = {
-        'titulo': 'Tabla Maestro de Base Legal',
+        'titulo': 'Tabla Maestra de Biblioteca Jurídica',
         'subpagina': 'subpage',
         'entity': page_obj, 
         'paginator': paginator,
@@ -141,7 +141,7 @@ def crear_baselegal(request):
                         object_id=baselegal_guardado.id,
                         object_repr=str(baselegal_guardado),
                         action_flag=ADDITION,
-                        change_message="Creó un nuevo baselegal en el sistema."
+                        change_message="Creó una nueva base legal en el sistema."
                     )
                     
                     messages.success(request, "Base Legal registrada con éxito!")
@@ -150,7 +150,7 @@ def crear_baselegal(request):
                     return redirect('listado_baselegal')
                     
             except IntegrityError as e:
-                logger.error(f"Error de integridad al crear baselegal: {str(e)}")
+                logger.error(f"Error de integridad al crear base legal: {str(e)}")
                 messages.error(request, "Error: El ID o código ingresado ya se encuentra en uso.")
     else:
         formulario = BaselegalForm()
@@ -159,7 +159,7 @@ def crear_baselegal(request):
     context = {
         'formulario': formulario,
         'formset': formset,
-        'titulo': "SIGEDOC - Registrar Nuevo Baselegal",
+        'titulo': "Registrar Nuevo Base legal",
         'query_string': query_string,
     }
     return render(request, 'baselegal/crear.html', context)
@@ -244,7 +244,7 @@ def editar_baselegal(request, id):
     context = {
         'formulario': formulario,
         'formset': formset,
-        'titulo': "SIGEDOC - Editar Baselegal",
+        'titulo': "Editar Base legal",
         'query_string': query_string,
     }
     return render(request, 'baselegal/editar.html', context)
@@ -306,8 +306,8 @@ def reporte_baselegal_pdf(request):
 
     context = {
         'baselegal': baselegal,
-        'titulo_reporte': 'Reporte de Baselegal',
-        'logo_path': f"{settings.STATIC_URL}img/membrete.png",
+        'titulo_reporte': 'Reporte de Biblioteca Jurídica',
+        'logo_path': f"{settings.STATIC_URL}img/logo2.png",
         'fecha_emision': datetime.now(),
     }
     

@@ -220,7 +220,7 @@ def editar_dependencias(request, id):
             # 🛑 BLOQUE EXCEPT: Captura errores durante la edición
             
             # 1. Registro detallado en el Log del Sistema
-            logger.error(f"Fallo crítico al editar catgoría ID {id} para usuario {request.user.pk}: {e}", exc_info=True)
+            logger.error(f"Fallo crítico al editar dependencia ID {id} para usuario {request.user.pk}: {e}", exc_info=True)
             
             # 2. Registro de Fallo en la tabla LogEntry (Admin History)
             LogEntry.objects.create(
@@ -332,7 +332,7 @@ def reporte_dependencias_excel(request):
     ws.title = "Reporte Dependencias"
     
     # --- 2. INSERCIÓN DEL LOGO ---
-    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo_inven.png')
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo2.png')
     try:
         img = OpenpyxlImage(logo_path)
         ws.row_dimensions[1].height = 50
@@ -456,7 +456,7 @@ def reporte_dependencias_pdf(request):
     
     # IMPORTANTE: Generar la URL absoluta para el logo
     try:
-        logo_url = request.build_absolute_uri('/static/img/logo_inven.png') 
+        logo_url = request.build_absolute_uri('/static/img/logo2.png') 
     except AttributeError:
         logo_url = "" 
 

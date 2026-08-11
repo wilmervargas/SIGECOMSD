@@ -2,12 +2,12 @@
 {% extends 'base.html' %}
 {% load static %}
 
-    {% block nav %}
+  {% block nav %}
     <nav style="display: flex; justify-content: space-between; align-items: center; padding: 10px 20px;">
       <ul class="menu-principal">
         {# --- MÓDULO TABLAS --- #}
         {# Se muestra si es Superusuario O si tiene al menos un permiso de lectura en tablas #}
-        {% if user.is_superuser or user.is_staff %}
+        {% if user.is_superuser or perms.inventario.view_categoria or perms.inventario.view_unidadmedida or perms.inventario.view_dependencia or perms.inventario.view_director or perms.inventario.view_proveedor %}
         <li>
           <a href="#"><i class="ph ph-table text-lg"></i> Tablas <i class="ph ph-caret-down"></i></a>
           <ul class="submenu">
@@ -35,23 +35,23 @@
         {% endif %}
 
         {# --- MÓDULO REQUISICIONES --- #}
-        {% if perms.salidas.view_salidaencabezado %}
+        {% if user.is_superuser or perms.salidas.view_salidaencabezado or perms.productos.view_producto %}
         <li>
           <a href="#"><i class="ph ph-package"></i> Requisiciones <i class="ph ph-caret-down"></i></a>
           <ul class="submenu">
-            {% if user.is_superuser or perms.inventario.view_producto %}
+            {% if user.is_superuser or perms.productos.view_producto %}
               <li><a href="{% url 'listado_productos' %}"><i class="ph ph-package text-lg"></i> Insumo/Carga Inicial</a></li>
             {% endif %}
 
-            {% if perms.salidas.view_salidaencabezado %}
+            {% if user.is_superuser or perms.salidas.view_salidaencabezado %}
               <li><a href="{% url 'listado_salidas' %}"><i class="ph ph-clipboard-text text-lg"></i> Requisiciones</a></li>
             {% endif %}
 
-            {% if user.is_superuser or perms.inventario.view_compra %}
+            {% if user.is_superuser or perms.entradas.view_entradaencabezado %}
               <li><a href="{% url 'listado_entradas' %}"><i class="ph ph-truck text-lg"></i> Compras/Reposiciones</a></li>
             {% endif %}
 
-            {% if user.is_superuser or perms.inventario.view_ranking %}
+            {% if user.is_superuser or perms.estadisticas.view_ranking %}
               <li><a href="{% url 'listado_ranking_salidas' %}"><i class="ph ph-clipboard-text text-lg"></i> Ranking</a></li>
             {% endif %}
           </ul>
@@ -59,15 +59,18 @@
         {% endif %}
 
         {# --- BIBLIOTECA JURÍDICA (Exclusivo Superusuario) --- #}
-        {% if user.is_superuser %}
+        {% if user.is_superuser or perms.baselegal.view_baselegal %}
           <li><a href="{% url 'listado_baselegal' %}"><i class="ph ph-device-mobile"></i> Biblioteca Jurídica</a></li>
         {% endif %}
 
         {# --- MÓDULO O.y.M. --- #}
-        {% if user.is_superuser or perms.inventario.can_access_oym %}
+        {% if perms.inventario.view_oym %}
         <li>
           <a href="#"><i class="ph ph-package"></i> O.y.M. <i class="ph ph-caret-down"></i></a>
           <ul class="submenu">
+            {% if user.is_superuser or perms.inventario.view_oym %}
+              <li><a href="{% url 'listado_dependencias' %}"><i class="ph ph-buildings text-lg"></i> Dependencias/Unidades</a></li>
+            {% endif %}
             <li><a href="{% url 'listado_manuales' %}"><i class="ph ph-desktop"></i> Manuales</a></li>
             <li><a href="{% url 'listado_procedimientos' %}"><i class="ph ph-device-mobile"></i> Procedimientos</a></li>
             <li><a href="{% url 'listado_protocolos' %}"><i class="ph ph-device-mobile"></i> Protocolos</a></li>

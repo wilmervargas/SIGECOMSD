@@ -5,12 +5,11 @@ from .models import UnidadBD
 # NUEVO: Formulario para Crear/Editar una unidad
 # =================================================================
 
-
 class UnidadFilterForm(forms.Form):
     # Este campo se usa para buscar tanto en cod_unidad como en descripcion
     search_query = forms.CharField(
         label='Buscar por Código o Descripción', 
-        required=False, 
+        required=False,
         widget=forms.TextInput(attrs={'class': 'form-control', 
                 'style': 'color: black;', 
                 'placeholder': 'escribe código/descripción'}))

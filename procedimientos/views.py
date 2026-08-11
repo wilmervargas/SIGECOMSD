@@ -307,7 +307,7 @@ def reporte_procedimientos_pdf(request):
     context = {
         'procedimientos': procedimientos,
         'titulo_reporte': 'Reporte de Procedimientos',
-        'logo_path': f"{settings.STATIC_URL}img/membrete.png",
+        'logo_path': f"{settings.STATIC_URL}img/logo2.png",
         'fecha_emision': datetime.now(),
     }
     

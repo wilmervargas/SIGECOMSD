@@ -1,8 +1,4 @@
 
-{% load static %}
-
-{% block contenido %}
-
 <section id="three" class="wrapper style2">
     <div class="inner" style="max-width: 1350px; margin: 0 auto;">
         <div class="box">
@@ -27,7 +23,7 @@
                     
                     <div class="sub-section-frame" style="padding: 5px !important;">
                         <h4 style="color: #3b18d6; margin-bottom: 20px; font-weight: bold; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; display: flex; gap: 10px; align-items: center; width: 100%;">
-                            <span>📋 Datos Principales del Base Legal (Versión Actual)</span>
+                            <span>📋 Datos Principales de Base Legal (Versión Actual)</span>
                             {% if not formulario.instance.pk %}
                                 <span class="badge-new">Nuevo</span>
                             {% else %}
@@ -37,7 +33,7 @@
 
                         {% if formulario.instance.pk %}
                             <div style="width: 100%; background: #eff6ff; border-left: 4px solid #af1e36; padding: 8px 12px; margin-bottom: 25px; font-size: 1.5rem !important; line-height: 1.4; color: #af1e36; border-radius: 0 6px 6px 0; box-sizing: border-box;">
-                                <strong>ℹ️ Nota importante:</strong> Si cambia el <strong>Código Base Legal</strong> es porque desea crear un nuevo baselegal o una nueva estructura de codificación; en consecuencia, el sistema archivará este registro en el histórico.
+                                <strong>ℹ️ Nota importante:</strong> Si cambia el <strong>Código Base Legal</strong> es porque desea crear una nueva base legal o una nueva estructura de codificación; en consecuencia, el sistema archivará este registro en el histórico.
                             </div> 
                         {% endif %}
 
@@ -87,8 +83,8 @@
                                     <div class="align-bottom-content">
                                         <label class="form-label" style="text-align: center; display: block;">Distribución Permitida</label>
                                         
-                                        <div class="checkbox-wrapper" style="gap: 24px; justify-content: center; align-items: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px; display: flex; width: 100%;">
-                                            <label for="id_distribucion_digital" style="color: #3b18d6; font-weight: 600; font-size: 0.85em; cursor: pointer; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+                                        <div class="checkbox-wrapper" style="gap: 5px; justify-content: center; align-items: center; background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px; display: flex; width: 100%;">
+                                            <label for="id_distribucion_digital" style="color: #3b18d6; font-weight: 700; font-size: 0.85em; cursor: pointer; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px;">
                                                 <span>Digital</span>
                                                 {{ formulario.distribucion_digital }}
                                             </label>
@@ -264,11 +260,13 @@
 
                                         <td style="vertical-align: middle !important; text-align: center;">
                                             <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
-                                                <button type="button" class="button small icon fa-trash delete-row-button" 
-                                                        style="background-color: #dc2626; color: white; border: none; height: 26px; width: 26px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; margin: 0;">
+                                                <button type="button" class="delete-row-button" 
+                                                        style="background-color: #dc2626; color: #ffffff; border: none; height: 32px; width: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; padding: 0; cursor: pointer;">
+                                                    <i class="icon fa-trash" style="color: #dc2626; font-size: 14px;"></i>
                                                 </button>
+
                                                 {% if formset.can_delete %}
-                                                    <div style="display:none;">{{ form.DELETE }}</div>
+                                                    <div style="display: none;">{{ form.DELETE }}</div>
                                                 {% endif %}
                                             </div>
                                         </td>
@@ -276,7 +274,7 @@
                                     {% empty %}
                                     <tr>
                                         <td colspan="11" style="text-align: center; padding: 25px !important; color: #64748b; font-style: italic;">
-                                            No existen registros históricos para este baselegal.
+                                            No existen registros históricos para esta base legal.
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -340,4 +338,4 @@
         }
     });
 </script>
-{% endblock contenido %}
+

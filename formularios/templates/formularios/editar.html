@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 {% load l10n %}
@@ -9,9 +8,23 @@
 
 {% block contenido %}
 
-    <section id="one" class="wrapper style2" style="padding: 10px 0 !important;">
-        <h2 style="color:blue; text-align:center; font-weight:bold; margin-bottom: 5px;">TABLA DE FORMULARIOS - EDITAR</h2>
-        {% include 'formularios/formulario.html' %}
-    </section>
+    <!-- Envoltura principal forzando el espaciado lateral -->
+    <div class="w-full box-border px-3 sm:px-6 py-6" style="padding-left: 15px !important; padding-right: 15px !important;">
+        
+        <div style="margin-top: 10px">
+            <h4 style="color:white; text-align:center; font-weight:bold; margin-bottom: 5px;">TABLA DE FORMULARIOS - EDITAR</h4>
+        </div>
+
+        <!-- Tarjeta externa contenedora -->
+        <div style="background-color: #f1f5f9 !important;" class="w-full rounded-3xl border-2 border-slate-300 shadow-2xl p-6 sm:p-8 mb-6">
+
+            <!-- Bloque blanco del formulario con clase de relieve y padding inferior (pb-8) -->
+            <div style="background-color: #ffffff !important;" class="form-relieve rounded-2xl border border-slate-200 p-20 sm:p-8 pb-8 shadow-sm mx-2 sm:mx-6">
+                {% include 'formularios/formulario.html' %}
+            </div>
+
+        </div>
+
+    </div>
 
 {% endblock contenido %}

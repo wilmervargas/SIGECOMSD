@@ -105,23 +105,23 @@
                             {% for detalle in detalles %}
                             <tr>
                                 {% if forloop.first %}
-                                    <td rowspan="{{ detalles.count }}" class="text-center">
+                                    <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
                                         <strong>{{ salida.num_requi }}</strong><br>
                                         {{ salida.fecha_requi|date:"d/m/Y" }}
                                     </td>
-                                    <td rowspan="{{ detalles.count }}" class="text-center">
-                                        {{ salida.fecha_aprobacion|date:"d/m/Y"|default:"Pendiente" }}
+                                    <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
+                                        {{ salida.fecha_aprobacion|date:"d/m/Y"|default:"---" }}
                                     </td>
-                                    <td rowspan="{{ detalles.count }}">
+                                    <td rowspan="{{ detalles.count|default:1 }}">
                                         {{ salida.cod_dependencia_soli.descripcion|upper|default:"Sin Dependencia" }}
                                     </td>
-                                    <td rowspan="{{ detalles.count }}" class="text-center">
+                                    <td rowspan="{{ detalles.count|default:1 }}" class="text-center">
                                         <span style="font-size: 7pt; color: #3b18d6;">{{ salida.estado }}</span>
                                     </td>
                                 {% endif %}
-                                <td>{{ detalle.cod_producto.cod_producto|default:" " }}</td>
+                                <td>{{ detalle.cod_producto.cod_producto }}</td>
                                 <td>{{ detalle.cod_producto.descripcion|truncatechars:50 }}</td>
-                                <td>{{ detalle.cod_producto.cod_unidad|default:" " }}</td>
+                                <td>{{ detalle.cod_producto.cod_unidad }}</td>
                                 <td class="text-right">{{ detalle.cant_solicitada|default:0 }}</td>
                                 <td class="text-right">{{ detalle.cant_entregada|default:0 }}</td>
                             </tr>
@@ -132,16 +132,22 @@
                                     <strong>{{ salida.num_requi }}</strong><br>
                                     {{ salida.fecha_requi|date:"d/m/Y" }}
                                 </td>
-                                <td class="text-center">{{ salida.fecha_aprobacion|date:"d/m/Y"|default:"---" }}</td>
-                                <td>{{ salida.cod_dependencia_soli.descripcion|upper }}</td>
-                                <td class="text-center">{{ salida.estado }}</td>
-                                <td colspan="3" class="text-center" style="color: gray;"><em>Requisición sin productos</em></td>
+                                <td class="text-center">
+                                    {{ salida.fecha_aprobacion|date:"d/m/Y"|default:"---" }}
+                                </td>
+                                <td>
+                                    {{ salida.cod_dependencia_soli.descripcion|upper|default:"Sin Dependencia" }}
+                                </td>
+                                <td class="text-center">
+                                    <span style="font-size: 7pt; color: #3b18d6;">{{ salida.estado }}</span>
+                                </td>
+                                <td colspan="5" class="text-center" style="color: gray;"><em>Requisición sin productos registrados</em></td>
                             </tr>
                         {% endif %}
                     {% endwith %}
                 {% empty %}
                     <tr>
-                        <td colspan="7" class="text-center">No se encontraron requisiciones con los filtros seleccionados.</td>
+                        <td colspan="9" class="text-center">No se encontraron requisiciones con los filtros seleccionados.</td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -404,7 +404,7 @@ def reporte_productos_excel(request):
     ws.title = "Insumos"
     
     # Logo
-    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo_inven.png')
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo2.png')
     try:
         img = OpenpyxlImage(logo_path)
         img.width = 90
@@ -555,7 +555,7 @@ def reporte_productos_pdf(request):
 
     # --- 4. PREPARACIÓN DEL CONTEXTO ---
     try:
-        logo_url = request.build_absolute_uri('/static/img/logo_inven.png') 
+        logo_url = request.build_absolute_uri('/static/img/logo2.png') 
     except:
         logo_url = "" 
 

@@ -4,8 +4,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from openpyxl.drawing.image import Image as OpenpyxlImage
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment, Border, Side, PatternFill
-from io import BytesIO
 from openpyxl.utils import get_column_letter
+from io import BytesIO
 from xhtml2pdf import pisa
 from django.conf import settings
 from django.views.decorators.http import require_POST # Opcional, pero bueno para APIs
@@ -337,7 +337,7 @@ def reporte_unidades_excel(request):
     ws.title = "Reporte Unidades"
     
     # --- 2. INSERCIÓN DEL LOGO ---
-    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo_inven.png')
+    logo_path = os.path.join(settings.BASE_DIR, 'static', 'img', 'logo2.png')
     try:
         img = OpenpyxlImage(logo_path)
         ws.row_dimensions[1].height = 50 
@@ -442,7 +442,7 @@ def reporte_unidades_pdf(request):
 
     # --- 2. Preparación del Contexto ---
     try:
-        logo_url = request.build_absolute_uri('/static/img/logo_inven.png') 
+        logo_url = request.build_absolute_uri('/static/img/logo2.png') 
     except AttributeError:
         logo_url = "" 
 

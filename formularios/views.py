@@ -312,7 +312,7 @@ def reporte_formularios_pdf(request):
     context = {
         'formularios': formularios,
         'titulo_reporte': 'Reporte de Formularios',
-        'logo_path': f"{settings.STATIC_URL}img/membrete.png",
+        'logo_path': f"{settings.STATIC_URL}img/logo2.png",
         'fecha_emision': datetime.now(),
     }
     
